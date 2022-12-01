@@ -30,7 +30,8 @@ namespace ksmith70DungeonFinalProject
             // hero party is already decided at the outset so we only
             // need to update the enemies
             // populate our turn list (but keep all the heroes)
-            
+
+            encounters = encounters + 1;
             // if its the first turn then populate the turnOrder
             if(currentTurn == 0)
             {
@@ -52,6 +53,17 @@ namespace ksmith70DungeonFinalProject
             // generate all our Actors so we can track their stats (to update gui)
             // generate a new encounter based on that actor
             currentTurn = 0;
+
+            while(GameWon() == false)
+            {
+                // while encounter is not over
+                while (EncounterWon() == false)
+                {
+
+                }
+            }
+
+
             GenerateEncounter();
             // SortTurnOrder(); 
             TakeTurn();
@@ -89,14 +101,59 @@ namespace ksmith70DungeonFinalProject
             // Heroes are default so we dont need to randomly select them
 
             Fighter fighter = new Fighter();
+            Dragon dragon = new Dragon();
 
-            turnOrder.Add(new Fighter());
-            turnOrder.Add(new Dragon()); // TODO : randomize this
+            turnOrder.Add(fighter);
+            turnOrder.Add(dragon); // TODO : randomize this
         }
 
         private void SortTurnOrder()
         {
             // foreach actor in turnOrder order by speed using bubble sort
+        }
+
+        private bool EncounterWon()
+        {
+            bool wonEncounter = false;
+            int numHeroes = 0;
+            int numDeadHeroes = 0;
+            int numEnemies = 0;
+            int numDeadEnemies = 0;
+
+            // get num enemies and heroes
+            foreach (var actor in turnOrder)
+            {
+                if (actor is Enemy)
+                {
+                    if (actor.HitPoints <= 0)
+                    {
+                        numDeadEnemies++;
+                    }
+                    numEnemies++;
+                }
+                else
+                {
+                    if (actor.HitPoints <= 0)
+                    {
+                        numDeadHeroes++;
+                    }
+                    numHeroes++;
+                }
+            }
+
+            if(numDeadEnemies == numEnemies || numDeadHeroes == numHeroes)
+            {
+                wonEncounter = true;
+            }
+            return wonEncounter;
+        }
+
+        private bool GameWon()
+        {
+            // idk what goes in here 
+            // for now game never ends
+            return false;
+
         }
 
         public void UpdateGUI()

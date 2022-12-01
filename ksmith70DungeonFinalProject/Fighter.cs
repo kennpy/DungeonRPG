@@ -11,7 +11,12 @@ namespace ksmith70DungeonFinalProject
             Defense = 5;
             HitPoints = 5;
             Intelligence = 5;
-             5, "Juan", 5, "Punch", 5, false
+            MagicDefense = 5;
+            Name = "Juan";
+            Speed = 5;
+            SpriteName = "Punch";
+            Strength = 5;
+            IsDefending = false;
         }
 
 
