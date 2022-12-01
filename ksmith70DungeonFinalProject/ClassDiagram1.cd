@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="ksmith70DungeonFinalProject.Actor">
+    <Position X="4.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQIAAAABEAAAAAAAAAAAAAAIAEAQAAQAAABAAAQAI=</HashCode>
+      <FileName>Actor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ksmith70DungeonFinalProject.Hero">
+    <Position X="2.25" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAAAAAAAAAAAAAAAAAAAIAAAACAAAAAAAAAAA=</HashCode>
+      <FileName>Hero.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ksmith70DungeonFinalProject.Enemy">
+    <Position X="7.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Enemy.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ksmith70DungeonFinalProject.Fighter">
+    <Position X="0.5" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Fighter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ksmith70DungeonFinalProject.Mage">
+    <Position X="2.25" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Mage.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ksmith70DungeonFinalProject.Cleric">
+    <Position X="4" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Cleric.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ksmith70DungeonFinalProject.Bandit">
+    <Position X="9.75" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Bandit.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ksmith70DungeonFinalProject.Ogre">
+    <Position X="8" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Ogre.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ksmith70DungeonFinalProject.Dragon">
+    <Position X="6.25" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Dragon.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ksmith70DungeonFinalProject.GameScreen">
+    <Position X="10.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ADAAIBAAACAAgAAAAACAQAADAAAAABCwEQAAAQAAAIo=</HashCode>
+      <FileName>GameScreen.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ksmith70DungeonFinalProject.GameLogic">
+    <Position X="12" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAIADAAAAIACAAAAAAAAAAIAAABAAAAAAEgAAA=</HashCode>
+      <FileName>GameLogic.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ksmith70DungeonFinalProject.DungeonGame">
+    <Position X="7.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAgAAI=</HashCode>
+      <FileName>DungeonGame.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ksmith70DungeonFinalProject.UpdateEventArgs">
+    <Position X="2.25" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>UpdateEventArgs.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
