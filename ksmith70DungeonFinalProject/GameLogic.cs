@@ -11,7 +11,7 @@ namespace ksmith70DungeonFinalProject
         private int encounters;
         private List<Actor> turnOrder;
 
-        public event EventHandler Update;
+        public event EventHandler<UpdateEventArgs> Update;
 
         public void EnemyTurn()
         {
@@ -39,9 +39,16 @@ namespace ksmith70DungeonFinalProject
             throw new System.NotImplementedException();
         }
 
-        public void OnUpdate()
+        public void UpdateGUI()
         {
-            throw new System.NotImplementedException();
+            UpdateEventArgs args = new UpdateEventArgs();
+            args.HeroTurnTag = 1;
+            OnUpdate(this, args);
+        }
+
+        protected virtual void OnUpdate(object sender, UpdateEventArgs e)
+        {
+            Update.Invoke(this, e);
         }
 
 

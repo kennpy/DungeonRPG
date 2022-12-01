@@ -10,9 +10,6 @@ namespace ksmith70DungeonFinalProject
     {
         static void Main()
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new GameScreen());
             DungeonGame game = new DungeonGame();
             game.Run();
         }

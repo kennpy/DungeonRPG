@@ -35,7 +35,7 @@
             this.enemyPb3 = new System.Windows.Forms.PictureBox();
             this.enemyPb1 = new System.Windows.Forms.PictureBox();
             this.enemyPb2 = new System.Windows.Forms.PictureBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.battleLog = new System.Windows.Forms.TextBox();
             this.attackBtn = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.specialBtn = new System.Windows.Forms.Button();
@@ -117,16 +117,16 @@
             this.enemyPb2.TabStop = false;
             this.enemyPb2.Tag = "2";
             // 
-            // textBox1
+            // battleLog
             // 
-            this.textBox1.BackColor = System.Drawing.SystemColors.ScrollBar;
-            this.textBox1.Enabled = false;
-            this.textBox1.Location = new System.Drawing.Point(513, 277);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox1.Size = new System.Drawing.Size(275, 161);
-            this.textBox1.TabIndex = 6;
+            this.battleLog.BackColor = System.Drawing.SystemColors.ScrollBar;
+            this.battleLog.Enabled = false;
+            this.battleLog.Location = new System.Drawing.Point(513, 277);
+            this.battleLog.Multiline = true;
+            this.battleLog.Name = "battleLog";
+            this.battleLog.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.battleLog.Size = new System.Drawing.Size(275, 161);
+            this.battleLog.TabIndex = 6;
             // 
             // attackBtn
             // 
@@ -134,6 +134,7 @@
             this.attackBtn.Name = "attackBtn";
             this.attackBtn.Size = new System.Drawing.Size(163, 23);
             this.attackBtn.TabIndex = 7;
+            this.attackBtn.Tag = "Attack";
             this.attackBtn.Text = "Attack";
             this.attackBtn.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.attackBtn.UseVisualStyleBackColor = true;
@@ -156,6 +157,7 @@
             this.specialBtn.Name = "specialBtn";
             this.specialBtn.Size = new System.Drawing.Size(163, 23);
             this.specialBtn.TabIndex = 9;
+            this.specialBtn.Tag = "Special";
             this.specialBtn.Text = "Special";
             this.specialBtn.UseVisualStyleBackColor = true;
             // 
@@ -165,6 +167,7 @@
             this.defendBtn.Name = "defendBtn";
             this.defendBtn.Size = new System.Drawing.Size(163, 23);
             this.defendBtn.TabIndex = 8;
+            this.defendBtn.Tag = "Defend";
             this.defendBtn.Text = "Defend";
             this.defendBtn.UseVisualStyleBackColor = true;
             // 
@@ -176,7 +179,7 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.panel1);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.battleLog);
             this.Controls.Add(this.enemyPb2);
             this.Controls.Add(this.enemyPb1);
             this.Controls.Add(this.enemyPb3);
@@ -206,7 +209,7 @@
         private System.Windows.Forms.PictureBox enemyPb3;
         private System.Windows.Forms.PictureBox enemyPb1;
         private System.Windows.Forms.PictureBox enemyPb2;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox battleLog;
         private System.Windows.Forms.Button attackBtn;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button specialBtn;

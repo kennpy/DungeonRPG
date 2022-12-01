@@ -15,11 +15,21 @@ namespace ksmith70DungeonFinalProject
         public event EventHandler TurnReady;
 
         List<PictureBox> heroPbs = new List<PictureBox>();
-        List<PictureBox> enemyPbs new List<PictureBox>();
+        List<PictureBox> enemyPbs = new List<PictureBox>();
 
         public GameScreen()
         {
             InitializeComponent();
+            SubscribeFormHandlers();
+            PrepBoard();
+
+        }
+
+        private void SubscribeFormHandlers()
+        {
+            attackBtn.Click += ActionButtonClick_Handler;
+            defendBtn.Click += ActionButtonClick_Handler;
+            specialBtn.Click += ActionButtonClick_Handler;
         }
 
         private void pictureBox4_Click(object sender, EventArgs e)
@@ -31,6 +41,7 @@ namespace ksmith70DungeonFinalProject
         {
             // get the tag so we know which was clicked
             int tagNum = (int)((PictureBox)sender).Tag;
+            battleLog.AppendText("ONE CLICKED ");
 
         }
 
@@ -42,6 +53,36 @@ namespace ksmith70DungeonFinalProject
             enemyPbs.Add(enemyPb1);
             enemyPbs.Add(enemyPb2);
             enemyPbs.Add(enemyPb3);
+        }
+
+        public void OnUpdate_Handler(object sender, UpdateEventArgs e)
+        {
+            // check if its a hero or an enemy
+            // update the correct one
+            // if isPlayerTurn set to false update enemy else player
+            heroPbs[e.HeroTurnTag - 1].BackColor = Color.Yellow;
+            heroPbs[e.HeroTurnTag - 1].Update();
+            battleLog.Text = (e.HeroTurnTag + " is taking a turn !");
+           
+        }
+
+        public void ActionButtonClick_Handler(object sender, EventArgs e)
+        {
+            string action = ((Button)sender).Tag.ToString();
+            switch (action)
+            {
+                case "Attack":
+                    battleLog.AppendText("\r\nAttack has been chosen !");
+                    break;
+                case "Defend":
+                    battleLog.AppendText("\r\nDefend has been chosen !");
+                    break;
+                case "Special":
+                    battleLog.AppendText("\r\nSpecial has been chosen !");
+                    break;
+
+            }
+                    
         }
     }
 }
