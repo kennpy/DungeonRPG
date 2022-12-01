@@ -21,6 +21,7 @@ namespace ksmith70DungeonFinalProject
             screen = new GameScreen();
             // SubscribeEvents();
             logic.Update += screen.OnUpdate_Handler;
+            screen.TurnReady += logic.OnTurnReady_Handler;
             logic.UpdateGUI();
 
             Application.Run(screen);

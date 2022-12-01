@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Text;
 using System.Linq;
 using System.Runtime.Remoting.Channels;
 using System.Text;
@@ -13,7 +14,10 @@ namespace ksmith70DungeonFinalProject
 {
     public partial class GameScreen : Form
     {
-        public event EventHandler TurnReady;
+
+        private string queuedAction;
+
+        public event EventHandler<TurnReadyEventArgs> TurnReady;
 
         List<PictureBox> heroPbs = new List<PictureBox>();
         List<PictureBox> enemyPbs = new List<PictureBox>();
@@ -31,17 +35,14 @@ namespace ksmith70DungeonFinalProject
             attackBtn.Enabled = true;
             defendBtn.Enabled = true;
             defendBtn.Enabled = true;
-            button1.Enabled = true;
-
-            button1.EnabledChanged += OnEnabledChanged;
-            button1.StyleChanged += OnEnabledChanged;
-            button1.Invalidated += OnEnabledChanged;
-            button1.Validating += OnEnabledChanged;
-            button1.Validated += OnEnabledChanged;
 
             attackBtn.Click += ActionButtonClick_Handler;
             defendBtn.Click += ActionButtonClick_Handler;
             specialBtn.Click += ActionButtonClick_Handler;
+
+            enemyPb1.Click += EnemyPbClicked_Handler;
+            enemyPb2.Click += EnemyPbClicked_Handler;
+            enemyPb3.Click += EnemyPbClicked_Handler;
         }
 
         private void OnEnabledChanged(object sender, EventArgs e)
@@ -56,8 +57,7 @@ namespace ksmith70DungeonFinalProject
         private void pictureBox1_Click(object sender, EventArgs e)
         {
             // get the tag so we know which was clicked
-            int tagNum = (int)((PictureBox)sender).Tag;
-            battleLog.AppendText("ONE CLICKED ");
+            int tagNum = int.Parse((((PictureBox)sender).Tag).ToString());
 
         }
 
@@ -89,21 +89,61 @@ namespace ksmith70DungeonFinalProject
             {
                 case "Attack":
                     battleLog.AppendText("\r\nAttack has been chosen !");
+                    queuedAction = "Attack";
+                    
+                    attackBtn.Enabled = false;
+                    defendBtn.Enabled = false;
+                    specialBtn.Enabled = false;
+
+                    foreach(var enemy in enemyPbs)
+                    {
+                        enemy.BackColor = Color.Red;
+                    }
+
                     break;
                 case "Defend":
                     battleLog.AppendText("\r\nDefend has been chosen !");
+                    queuedAction = "Defend";
+
+                    attackBtn.Enabled = false;
+                    defendBtn.Enabled = false;
+                    specialBtn.Enabled = false;
+
+                    foreach (var enemy in enemyPbs)
+                    {
+                        enemy.BackColor = Color.Red;
+                    }
                     break;
                 case "Special":
+
+                    queuedAction = "Special";
+
+                    attackBtn.Enabled = false;
+                    defendBtn.Enabled = false;
+                    specialBtn.Enabled = false;
+
+                    foreach (var enemy in enemyPbs)
+                    {
+                        enemy.BackColor = Color.Red;
+                    }
                     battleLog.AppendText("\r\nSpecial has been chosen !");
                     break;
 
-            }
-                    
+            }       
+        }
+        private void EnemyPbClicked_Handler(object sender, EventArgs e)
+        {
+            int targetTag = int.Parse((((PictureBox)sender).Tag).ToString());
+            TurnReadyEventArgs args = new TurnReadyEventArgs();
+            args.Attack = queuedAction;
+            args.Enemy = targetTag;
+            OnTurnReady(this, args);
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        protected virtual void OnTurnReady(object sender, TurnReadyEventArgs e)
         {
-            battleLog.AppendText("WORKS WORKS WORKS");
+            TurnReady.Invoke(this, e);
+
         }
     }
 }
