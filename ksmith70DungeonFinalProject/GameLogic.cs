@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Xml.Linq;
+using System.Xml.Serialization;
 
 namespace ksmith70DungeonFinalProject
 {
@@ -11,7 +13,7 @@ namespace ksmith70DungeonFinalProject
         private int currentTurn;
         private int encounters;
         private List<Actor> turnOrder;
-
+        
         public event EventHandler<UpdateEventArgs> Update;
 
         public void EnemyTurn()
@@ -27,6 +29,15 @@ namespace ksmith70DungeonFinalProject
             // updates with the correct actors
             // hero party is already decided at the outset so we only
             // need to update the enemies
+            // populate our turn list (but keep all the heroes)
+            
+            // if its the first turn then populate the turnOrder
+            if(currentTurn == 0)
+            {
+                GenerateInitialTurnOrder();
+            }
+            
+
 
             throw new System.NotImplementedException();
         }
@@ -40,15 +51,52 @@ namespace ksmith70DungeonFinalProject
         {
             // generate all our Actors so we can track their stats (to update gui)
             // generate a new encounter based on that actor
-            
+            currentTurn = 0;
+            GenerateEncounter();
+            // SortTurnOrder(); 
+            TakeTurn();
+
             
             throw new System.NotImplementedException();
         }
 
         public void TakeTurn()
         {
-            // check 
+            // check who is actually taking a turn
+
+            Actor currentActor = turnOrder[currentTurn];
+            if(currentActor is Hero)
+            {
+                // send back hero info
+
+
+            }
+            else
+            {
+
+            }
+
             throw new System.NotImplementedException();
+        }
+
+        // private void UpdateTurnOrder
+        private void GenerateInitialTurnOrder()
+        {
+            Random randGenerator = new Random();
+            int randInt = randGenerator.Next();
+            turnOrder = new List<Actor>();
+            // FOR NOW ONLY ONE ACTOR BUT UPDATE TO 3 LATER
+            // Heroes are default so we dont need to randomly select them
+
+            Fighter fighter = new Fighter();
+
+            turnOrder.Add(new Fighter());
+            turnOrder.Add(new Dragon()); // TODO : randomize this
+        }
+
+        private void SortTurnOrder()
+        {
+            // foreach actor in turnOrder order by speed using bubble sort
         }
 
         public void UpdateGUI()
@@ -70,8 +118,8 @@ namespace ksmith70DungeonFinalProject
         public void OnTurnReady_Handler(object sender, TurnReadyEventArgs e)
         {
             // what is the action
-            // w
-            throw new System.NotImplementedException();
+            string action = e.Attack;
+            int enemy = e.Enemy; 
         }
 
 

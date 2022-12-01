@@ -22,16 +22,26 @@ namespace ksmith70DungeonFinalProject
 
         public Actor(int defense, int hitPoints, int intelligence, int magicDefense, string name, int speed, string spriteName, int strength, bool isDefending)
         {
-            this.defense = defense;
-            this.hitPoints = hitPoints;
-            this.intelligence = intelligence;
-            this.magicDefense = magicDefense;
-            this.name = name;
-            this.speed = speed;
-            this.spriteName = spriteName;
-            this.strength = strength;
-            this.isDefending = isDefending;
+            this.Defense = defense;
+            this.HitPoints = hitPoints;
+            this.Intelligence = intelligence;
+            this.MagicDefense = magicDefense;
+            this.Name = name;
+            this.Speed = speed;
+            this.SpriteName = spriteName;
+            this.Strength = strength;
+            this.IsDefending = isDefending;
         }
+
+        public bool IsDefending { get => isDefending; set => isDefending = value; }
+        public int Defense { get => defense; set => defense = value; }
+        public int HitPoints { get => hitPoints; set => hitPoints = value; }
+        public int Intelligence { get => intelligence; set => intelligence = value; }
+        public int MagicDefense { get => magicDefense; set => magicDefense = value; }
+        public string Name { get => name; set => name = value; }
+        public int Speed { get => speed; set => speed = value; }
+        public string SpriteName { get => spriteName; set => spriteName = value; }
+        public int Strength { get => strength; set => strength = value; }
 
         public void Attack(Actor target)
         {

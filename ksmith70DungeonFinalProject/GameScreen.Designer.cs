@@ -40,6 +40,8 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.specialBtn = new System.Windows.Forms.Button();
             this.defendBtn = new System.Windows.Forms.Button();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.progressBar2 = new System.Windows.Forms.ProgressBar();
             ((System.ComponentModel.ISupportInitialize)(this.heroPb1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.heroPb2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.heroPb3)).BeginInit();
@@ -53,7 +55,7 @@
             // 
             this.heroPb1.BackColor = System.Drawing.Color.Transparent;
             this.heroPb1.Image = ((System.Drawing.Image)(resources.GetObject("heroPb1.Image")));
-            this.heroPb1.Location = new System.Drawing.Point(117, 107);
+            this.heroPb1.Location = new System.Drawing.Point(123, 107);
             this.heroPb1.Name = "heroPb1";
             this.heroPb1.Size = new System.Drawing.Size(60, 50);
             this.heroPb1.TabIndex = 0;
@@ -171,6 +173,22 @@
             this.defendBtn.Text = "Defend";
             this.defendBtn.UseVisualStyleBackColor = true;
             // 
+            // progressBar1
+            // 
+            this.progressBar1.Location = new System.Drawing.Point(123, 163);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(100, 23);
+            this.progressBar1.TabIndex = 9;
+            this.progressBar1.Value = 100;
+            // 
+            // progressBar2
+            // 
+            this.progressBar2.Location = new System.Drawing.Point(484, 141);
+            this.progressBar2.Name = "progressBar2";
+            this.progressBar2.Size = new System.Drawing.Size(100, 23);
+            this.progressBar2.TabIndex = 10;
+            this.progressBar2.Value = 100;
+            // 
             // GameScreen
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -178,6 +196,8 @@
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.progressBar2);
+            this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.battleLog);
             this.Controls.Add(this.enemyPb2);
@@ -213,6 +233,8 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button specialBtn;
         private System.Windows.Forms.Button defendBtn;
+        private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.ProgressBar progressBar2;
     }
 }
 
