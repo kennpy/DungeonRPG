@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.Remoting.Channels;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -20,18 +21,33 @@ namespace ksmith70DungeonFinalProject
         public GameScreen()
         {
             InitializeComponent();
-            SubscribeFormHandlers();
             PrepBoard();
+            SubscribeFormHandlers();
 
         }
 
         private void SubscribeFormHandlers()
         {
+            attackBtn.Enabled = true;
+            defendBtn.Enabled = true;
+            defendBtn.Enabled = true;
+            button1.Enabled = true;
+
+            button1.EnabledChanged += OnEnabledChanged;
+            button1.StyleChanged += OnEnabledChanged;
+            button1.Invalidated += OnEnabledChanged;
+            button1.Validating += OnEnabledChanged;
+            button1.Validated += OnEnabledChanged;
+
             attackBtn.Click += ActionButtonClick_Handler;
             defendBtn.Click += ActionButtonClick_Handler;
             specialBtn.Click += ActionButtonClick_Handler;
         }
 
+        private void OnEnabledChanged(object sender, EventArgs e)
+        {
+            // battleLog.AppendText("disabled !");
+        }
         private void pictureBox4_Click(object sender, EventArgs e)
         {
 
@@ -83,6 +99,11 @@ namespace ksmith70DungeonFinalProject
 
             }
                     
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            battleLog.AppendText("WORKS WORKS WORKS");
         }
     }
 }

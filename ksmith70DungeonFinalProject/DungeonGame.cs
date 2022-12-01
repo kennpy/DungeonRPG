@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace ksmith70DungeonFinalProject
@@ -16,11 +17,14 @@ namespace ksmith70DungeonFinalProject
             // main game loop 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+
             screen = new GameScreen();
+            // SubscribeEvents();
             logic.Update += screen.OnUpdate_Handler;
             logic.UpdateGUI();
-            // SubscribeEvents();
+
             Application.Run(screen);
+
 
         }
     }
