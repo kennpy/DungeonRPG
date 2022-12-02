@@ -172,6 +172,7 @@
             this.defendBtn.Tag = "Defend";
             this.defendBtn.Text = "Defend";
             this.defendBtn.UseVisualStyleBackColor = true;
+            this.defendBtn.Click += new System.EventHandler(this.defendBtn_Click);
             // 
             // progressBar1
             // 

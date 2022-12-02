@@ -9,13 +9,13 @@ namespace ksmith70DungeonFinalProject
     {
         public Fighter() {
             Defense = 5;
-            HitPoints = 5;
+            HitPoints = 10; // everyone starts with the same hit points ?? 
             Intelligence = 5;
             MagicDefense = 5;
             Name = "Juan";
             Speed = 5;
             SpriteName = "Punch";
-            Strength = 5;
+            Strength = 2;
             IsDefending = false;
         }
 

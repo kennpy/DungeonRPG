@@ -19,8 +19,39 @@ namespace ksmith70DungeonFinalProject
         public void EnemyTurn()
         {
             // generate an attack on a specific hero
-            // 
-            throw new System.NotImplementedException();
+            Enemy currentEnemy = (Enemy)turnOrder[1];
+            Hero target = (Hero)turnOrder[0];
+
+            Random randGenerator = new Random();
+            int rand = randGenerator.Next(0,11); // gives big value = chage to 0 or 1 (range)
+            string action;
+            if(rand <= 2)
+            {
+                action = "Defend";
+            }
+            else
+            {
+                action = "Attack";
+            }
+
+            switch (action)
+            {
+                case "Attack":
+                    currentEnemy.Attack(target);
+                    // if they are defending reset their defense status
+                    target.IsDefending = false;
+                    break;
+                case "Defend":
+                    currentEnemy.Defend();
+                    break;
+            }
+            UpdateEventArgs args = new UpdateEventArgs();
+            args.TargetIsHero = true;
+            args.Health = target.HitPoints;
+            args.TurnTag = 1; // HARD CODED HARD CODED HARD CODED
+            args.TargetName = target.Name;
+
+            OnUpdate(this, args);
         }
 
         public void GenerateEncounter()
@@ -35,10 +66,45 @@ namespace ksmith70DungeonFinalProject
             // if its the first turn then populate the turnOrder
         }
 
-        public void PlayerTurn()
-        {
-            throw new System.NotImplementedException();
+        public void PlayerTurn(string action, Actor target) {
+
+            // current hero decided by current turn state
+
+            Hero currentHero = (Hero)turnOrder[0];
+
+            UpdateEventArgs args = new UpdateEventArgs();
+            // TODO : if its defend then target should be a hero
+            // so we could do target.Defend instead of currentHero if that is easier
+
+            switch (action)
+            {
+                case "Attack":
+                    currentHero.Attack(target);
+                    args.DefendWasChosen = false;
+                    // if they are defending reset their defense status
+                    target.IsDefending = false;
+                    break;
+                case "Defend":
+                    args.DefendWasChosen = true;
+                    currentHero.Defend();
+                    break;
+                case "Special":
+                    args.DefendWasChosen = false;
+                    currentHero.Special(target);
+                    // if they are defending reset their defense status
+                    target.IsDefending = false;
+                    break;
+            }
+
+            args.TargetIsHero = false;
+            args.Health = target.HitPoints;
+            args.TurnTag = 1; // HARD CODED HARD CODED HARD CODED
+            args.TargetName = target.Name;
+            
+
+            OnUpdate(this, args);
         }
+        
 
         public void Start()
         {
@@ -67,8 +133,20 @@ namespace ksmith70DungeonFinalProject
             // check who is actually taking a turn
             // well figure this out later. for now this is what we're doing
             // THIS WILL BREAK WHEN turnIndex IS DECIMAL PROBABLY
+
+            Actor target = turnOrder[targetId];
+            // TODO : if its defend then target should be a hero (link 1)
+
+            // TODO : enemy and player can kill eachother at the same time
+            // make it so this isnt the case (or ask if we can keep it since its more fun)
+
+            PlayerTurn(action, target);
+            EnemyTurn();
+            
             /*int turnIndex = currentTurn / turnOrder.Count;
-             
+            
+
+            
 
             Actor currentActor = turnOrder[turnIndex];
             if(currentActor is Hero)
@@ -157,7 +235,8 @@ namespace ksmith70DungeonFinalProject
             // if the actor is dead or alive (health less than or equal to 0)
 
             UpdateEventArgs args = new UpdateEventArgs();
-            args.HeroTurnTag = 1;
+            args.TurnTag = -1;
+            args.TargetIsHero = true; // ?? ?? 
             OnUpdate(this, args);
         }
 

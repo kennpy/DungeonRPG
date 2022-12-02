@@ -45,12 +45,18 @@ namespace ksmith70DungeonFinalProject
 
         public void Attack(Actor target)
         {
-            throw new System.NotImplementedException();
+            // calculate damage and deduct proper attribute
+            int damage = (int)(this.Strength); // - .5 * target.Defense);
+            if (target.IsDefending)
+            {
+                damage = (int)(damage - 1);
+            }
+            target.HitPoints = target.HitPoints - damage;
         }
 
         public void Defend()
         {
-            throw new System.NotImplementedException();
+            this.IsDefending = true;
         }
     }
 }

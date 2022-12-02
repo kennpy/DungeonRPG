@@ -17,7 +17,7 @@ namespace ksmith70DungeonFinalProject
             Name = "Boss Baby Dragon";
             Speed = 5;
             SpriteName = "Dragon";
-            Strength = 5;
+            Strength = 2;
             IsDefending = false;
         }
 

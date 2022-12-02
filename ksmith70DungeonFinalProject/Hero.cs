@@ -17,7 +17,9 @@ namespace ksmith70DungeonFinalProject
 
         public void Special(Actor target)
         {
-            throw new System.NotImplementedException();
+            // calculate damage and deduct proper attribute
+            int damage = (int)(this.Strength);
+            target.HitPoints = target.HitPoints - damage;
         }
     }
 }
