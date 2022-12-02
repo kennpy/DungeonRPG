@@ -33,14 +33,6 @@ namespace ksmith70DungeonFinalProject
 
             encounters = encounters + 1;
             // if its the first turn then populate the turnOrder
-            if(currentTurn == 0)
-            {
-                GenerateInitialTurnOrder();
-            }
-            
-
-
-            throw new System.NotImplementedException();
         }
 
         public void PlayerTurn()
@@ -53,30 +45,32 @@ namespace ksmith70DungeonFinalProject
             // generate all our Actors so we can track their stats (to update gui)
             // generate a new encounter based on that actor
             currentTurn = 0;
+            GenerateInitialTurnOrder();
+            // Actor firstActor = turnOrder[0];
 
-            while(GameWon() == false)
+            /*while (GameWon() == false)
             {
-                // while encounter is not over
+                GenerateEncounter();
+                // SortTurnOrder(); 
+                
+                // while encounter is not over keep taking turns
                 while (EncounterWon() == false)
                 {
+                    TakeTurn();
 
                 }
-            }
-
-
-            GenerateEncounter();
-            // SortTurnOrder(); 
-            TakeTurn();
-
-            
-            throw new System.NotImplementedException();
+            } */           
         }
 
-        public void TakeTurn()
+        public void TakeTurn(string action, int targetId)
         {
             // check who is actually taking a turn
+            // well figure this out later. for now this is what we're doing
+            // THIS WILL BREAK WHEN turnIndex IS DECIMAL PROBABLY
+            /*int turnIndex = currentTurn / turnOrder.Count;
+             
 
-            Actor currentActor = turnOrder[currentTurn];
+            Actor currentActor = turnOrder[turnIndex];
             if(currentActor is Hero)
             {
                 // send back hero info
@@ -86,9 +80,8 @@ namespace ksmith70DungeonFinalProject
             else
             {
 
-            }
+            }*/
 
-            throw new System.NotImplementedException();
         }
 
         // private void UpdateTurnOrder
@@ -176,7 +169,8 @@ namespace ksmith70DungeonFinalProject
         {
             // what is the action
             string action = e.Attack;
-            int enemy = e.Enemy; 
+            int enemy = e.Enemy;
+            TakeTurn(action, enemy);
         }
 
 

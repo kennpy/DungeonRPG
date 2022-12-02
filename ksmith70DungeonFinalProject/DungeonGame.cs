@@ -24,7 +24,9 @@ namespace ksmith70DungeonFinalProject
             screen.TurnReady += logic.OnTurnReady_Handler;
             logic.UpdateGUI();
 
+            logic.Start();
             Application.Run(screen);
+
 
 
         }
