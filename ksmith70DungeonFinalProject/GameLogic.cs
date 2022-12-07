@@ -13,8 +13,10 @@ namespace ksmith70DungeonFinalProject
     {
         private int currentTurn;
         private int encounters;
+
         private List<Actor> turnOrder = new List<Actor>();
         private List<Hero> playerParty = new List<Hero>();
+        private List<Enemy> enemyParty = new List<Enemy>();
 
         private const int NUM_MAX_ENEMIES = 3;
 
@@ -40,13 +42,19 @@ namespace ksmith70DungeonFinalProject
 
             // select random hero to attack
             Random randGenerator = new Random();
-            int randTargetId;
+            int randTargetId = randGenerator.Next(1,4); // MAY NOT WORK MAY NOT WORK (range0
 
-            Hero target = (Hero)turnOrder[0];
-            while(!(target is Hero))
+            Hero target = (Hero)turnOrder[randTargetId];
+            bool targetIsAlive = false;
+
+            while(!(target is Hero) && !targetIsAlive)
             {
-                randTargetId = randGenerator.Next(0, turnOrder.Count); // gives big value = chage to 0 or 1 (range)
+                randTargetId = randGenerator.Next(1, playerParty.Count + 1); // gives big value = chage to 0 or 1 (range)
                 target = (Hero)turnOrder[randTargetId];
+                if(target.HitPoints > 0)
+                {
+                    targetIsAlive = true;
+                }
             }
 
             int rand = randGenerator.Next(0,11); // gives big value = chage to 0 or 1 (range)
@@ -74,10 +82,10 @@ namespace ksmith70DungeonFinalProject
             UpdateEventArgs args = new UpdateEventArgs();
             args.TargetIsHero = true;
             args.Health = target.HitPoints;
-            args.TurnTag = currentTurn;
+            args.TurnTag = target.TagNumber;
             args.TargetName = target.Name;
 
-            currentTurn++;
+            // currentTurn++;
 
             OnUpdate(this, args); // update gui
 
@@ -88,6 +96,8 @@ namespace ksmith70DungeonFinalProject
                 playerChoiceArgs.PlayerTag = turnOrder[currentTurn].TagNumber;
                 OnPlayerChoice(this, playerChoiceArgs);
             }
+
+            // else we attack (trigger enemy turn and repeat) ?? 
         }
 
         // generate new encounter based on heroes / enemies in turn order
@@ -97,9 +107,13 @@ namespace ksmith70DungeonFinalProject
         {
             
             Random random = new Random();
-            int spawnChoice = random.Next(3);
-            for (int i = 0; i < NUM_MAX_ENEMIES; i++)
+
+            // TODO : Generate num enemies (instead of hard coded NUM_MAX_ENEMIES)
+            int numEnemies = random.Next(1, 4);
+
+            for (int i = 0; i < numEnemies; i++)
             {
+                int spawnChoice = random.Next(1,4);
                 switch (spawnChoice)
                 {
 
@@ -107,26 +121,24 @@ namespace ksmith70DungeonFinalProject
                         Bandit bandit = new Bandit();
                         bandit.TagNumber = i;
                         turnOrder.Add(bandit);
+                        enemyParty.Add(bandit);
                         break;
                     case 1:
                         Dragon dragon = new Dragon();
                         dragon.TagNumber = i;
                         turnOrder.Add(dragon);
+                        enemyParty.Add(dragon);
 
                         break;
                     case 2:
                         Ogre ogre = new Ogre();
                         ogre.TagNumber = i;
                         turnOrder.Add(ogre);
+                        enemyParty.Add(ogre);
 
                         break;
                 }
             }
-
-
-
-
-
 
             // throw new encounter event so the gui clears the board and
             // updates with the correct actors
@@ -179,7 +191,7 @@ namespace ksmith70DungeonFinalProject
 
             args.TargetIsHero = false;
             args.Health = target.HitPoints;
-            args.TurnTag = 1; // HARD CODED HARD CODED HARD CODED
+            args.TurnTag = target.TagNumber; // HARD CODED HARD CODED HARD CODED
             args.TargetName = target.Name;
 
             currentTurn++;
@@ -190,6 +202,7 @@ namespace ksmith70DungeonFinalProject
             while (turnOrder[currentTurn] is Enemy)
             {
                 EnemyTurn();
+                currentTurn++;
             }
 
         }
@@ -238,6 +251,7 @@ namespace ksmith70DungeonFinalProject
             while (turnOrder[currentTurn] is Enemy)
             {
                 EnemyTurn();
+                currentTurn++;
             }
 
 
@@ -347,6 +361,10 @@ namespace ksmith70DungeonFinalProject
             turnOrder.Add(mage);
             turnOrder.Add(cleric);
 
+            playerParty.Add(fighter);
+            playerParty.Add(mage);
+            playerParty.Add(cleric);
+
         }
 
         private void GenerateInitialTurnOrder()
@@ -447,13 +465,13 @@ namespace ksmith70DungeonFinalProject
         {
             PlayerChoice.Invoke(this, e);
         }
-        public async void OnTurnReady_Handler(object sender, TurnReadyEventArgs e)
+        public void OnTurnReady_Handler(object sender, TurnReadyEventArgs e)
         {
             // generate player turn
             // dont need attacker since we know that based on currentTurn
             string action = e.Attack;
-            int enemyId = e.Enemy;
-            Actor enemy = turnOrder[enemyId];
+            int enemyId = e.Enemy - 1; // prevent out of range error 
+            Actor enemy = enemyParty[enemyId];
 
             PlayerTurn(action, enemy);
 

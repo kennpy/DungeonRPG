@@ -16,7 +16,15 @@ namespace ksmith70DungeonFinalProject
         public Bandit()
         {
             this.Image = Properties.Resources.Bandit;
-
+            Defense = 8;
+            HitPoints = 10;
+            Intelligence = 3;
+            MagicDefense = 2;
+            Name = "Scary Bandit";
+            Speed = 5;
+            SpriteName = "Bandit";
+            Strength = 2;
+            IsDefending = false;
         }
     }
 }

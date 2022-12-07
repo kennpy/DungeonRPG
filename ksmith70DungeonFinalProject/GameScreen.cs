@@ -55,17 +55,17 @@ namespace ksmith70DungeonFinalProject
 
         private void SubscribeFormHandlers()
         {
-            attackBtn.Enabled = true;
+            /*attackBtn.Enabled = true;
             defendBtn.Enabled = true;
-            defendBtn.Enabled = true;
+            defendBtn.Enabled = true;*/
 
             attackBtn.Click += ActionButtonClick_Handler;
             defendBtn.Click += ActionButtonClick_Handler;
             specialBtn.Click += ActionButtonClick_Handler;
 
-            enemyPb1.Click += EnemyPbClicked_Handler;
-            // enemyPb2.Click += EnemyPbClicked_Handler;
-            // enemyPb3.Click += EnemyPbClicked_Handler;
+            /*enemyPb1.Click += EnemyPbClicked_Handler;
+            enemyPb2.Click += EnemyPbClicked_Handler;
+            enemyPb3.Click += EnemyPbClicked_Handler;*/
         }
 
 
@@ -107,23 +107,38 @@ namespace ksmith70DungeonFinalProject
 
             // flag the player turn ?? w/ background color change
 
+            // delete all enemyPbs (outdate) and replace
+            // unsibscribe enemyPb click handlers and re-enable for ones with enemies
+
+            foreach(var enemyBox in enemyPbs)
+            {
+                // enemyBox.BackgroundImage = Image. ?? 
+                //enemyBox.Visible = false;
+                enemyBox.Click -= EnemyPbClicked_Handler;
+
+            }
+
 
             for (int position = 0; position < heroPbs.Count; position++)
             {
                 // ... 
                 heroPbs[position].BackgroundImage = e.HeroSprites[position];
-                heroHealthBars[position].Value = e.HeroHealth[position];
+                heroHealthBars[position].Value = e.HeroHealth[position] * 10;
                 heroPbs[position].Update();
                 heroHealthBars[position].Update();
             }
             // same with enemy spries for statement
-            for (int position = 0; position < heroPbs.Count; position++)
+            // disbale their boxes until user selects an attack (happens in attackBtn handler)
+            for (int position = 0; position < e.EnemySprites.Count; position++)
             {
                 // ... 
                 enemyPbs[position].BackgroundImage = e.EnemySprites[position];
-                enemyHealthBars[position].Value = e.EnemyHealth[position];
+                enemyHealthBars[position].Value = e.EnemyHealth[position] * 10;
                 enemyPbs[position].Update();
                 enemyHealthBars[position].Update();
+                enemyPbs[position].Click += EnemyPbClicked_Handler;
+                enemyPbs[position].Enabled = false;
+
             }
         }
 
@@ -134,10 +149,11 @@ namespace ksmith70DungeonFinalProject
             defendBtn.Enabled = true;
             specialBtn.Enabled = true;
 
-            foreach(var enemyBox in enemyPbs)
+            // already disabled upon enemyPbClick so dont need to re-disable (i think)
+           /* foreach(var enemyBox in enemyPbs)
             {
                 enemyBox.Enabled = false;
-            }
+            }*/
 
         }
 
@@ -169,14 +185,14 @@ namespace ksmith70DungeonFinalProject
                             // this only works becase turn has depth of one
                             // we'd have to pass whether the next turn is a hero's one
                             // or not within the updateEventArgs
-                            attackBtn.Enabled = true;
+                          /*  attackBtn.Enabled = true;
                             defendBtn.Enabled = true;
-                            specialBtn.Enabled = true;
+                            specialBtn.Enabled = true;*/
 
                             // only working with one enemy box for now
-                            enemyPb1.Enabled = true;
+                           /* enemyPb1.Enabled = true;
                             enemyPb2.Enabled = true;
-                            enemyPb3.Enabled = true;
+                            enemyPb3.Enabled = true;*/
 
                         }
                         else
@@ -279,9 +295,10 @@ namespace ksmith70DungeonFinalProject
 
             }
             // enable all enemy buttons so user can select enemy
-            enemyPb1.Enabled = true;
-            enemyPb2.Enabled = true;
-            enemyPb3.Enabled = true;
+            foreach(var enemyBox in enemyPbs)
+            {
+                enemyBox.Enabled = true;
+            }
         }
         private void EnemyPbClicked_Handler(object sender, EventArgs e)
         {

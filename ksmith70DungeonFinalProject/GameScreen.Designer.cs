@@ -58,7 +58,6 @@
             // heroPb1
             // 
             this.heroPb1.BackColor = System.Drawing.Color.Transparent;
-            this.heroPb1.Image = ((System.Drawing.Image)(resources.GetObject("heroPb1.Image")));
             this.heroPb1.Location = new System.Drawing.Point(123, 107);
             this.heroPb1.Name = "heroPb1";
             this.heroPb1.Size = new System.Drawing.Size(60, 50);
@@ -70,7 +69,6 @@
             // heroPb2
             // 
             this.heroPb2.BackColor = System.Drawing.Color.Transparent;
-            this.heroPb2.Image = ((System.Drawing.Image)(resources.GetObject("heroPb2.Image")));
             this.heroPb2.Location = new System.Drawing.Point(57, 51);
             this.heroPb2.Name = "heroPb2";
             this.heroPb2.Size = new System.Drawing.Size(60, 50);
@@ -81,7 +79,6 @@
             // heroPb3
             // 
             this.heroPb3.BackColor = System.Drawing.Color.Transparent;
-            this.heroPb3.Image = ((System.Drawing.Image)(resources.GetObject("heroPb3.Image")));
             this.heroPb3.Location = new System.Drawing.Point(57, 161);
             this.heroPb3.Name = "heroPb3";
             this.heroPb3.Size = new System.Drawing.Size(60, 50);
@@ -92,7 +89,6 @@
             // enemyPb3
             // 
             this.enemyPb3.BackColor = System.Drawing.Color.Transparent;
-            this.enemyPb3.Image = ((System.Drawing.Image)(resources.GetObject("enemyPb3.Image")));
             this.enemyPb3.Location = new System.Drawing.Point(590, 138);
             this.enemyPb3.Name = "enemyPb3";
             this.enemyPb3.Size = new System.Drawing.Size(60, 50);
@@ -104,7 +100,6 @@
             // enemyPb1
             // 
             this.enemyPb1.BackColor = System.Drawing.Color.Transparent;
-            this.enemyPb1.Image = ((System.Drawing.Image)(resources.GetObject("enemyPb1.Image")));
             this.enemyPb1.Location = new System.Drawing.Point(524, 85);
             this.enemyPb1.Name = "enemyPb1";
             this.enemyPb1.Size = new System.Drawing.Size(60, 50);
@@ -115,7 +110,6 @@
             // enemyPb2
             // 
             this.enemyPb2.BackColor = System.Drawing.Color.Transparent;
-            this.enemyPb2.Image = ((System.Drawing.Image)(resources.GetObject("enemyPb2.Image")));
             this.enemyPb2.Location = new System.Drawing.Point(590, 41);
             this.enemyPb2.Name = "enemyPb2";
             this.enemyPb2.Size = new System.Drawing.Size(60, 50);
