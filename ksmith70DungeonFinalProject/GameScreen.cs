@@ -104,13 +104,14 @@ namespace ksmith70DungeonFinalProject
         public void OnNewEncounter_Handler(object sender, NewEncounterEventArgs e)
         {
             Bitmap a; // bitmap stores pixel data 
+            battleLog.AppendText("\r\nYou have been ambushed by some new enemies !");
 
             // flag the player turn ?? w/ background color change
 
             // delete all enemyPbs (outdate) and replace
             // unsibscribe enemyPb click handlers and re-enable for ones with enemies
 
-            foreach(var enemyBox in enemyPbs)
+            foreach (var enemyBox in enemyPbs)
             {
                 // enemyBox.BackgroundImage = Image. ?? 
                 //enemyBox.Visible = false;
@@ -170,6 +171,7 @@ namespace ksmith70DungeonFinalProject
 
                 if (!e.DefendWasChosen)
                 {
+                    battleLog.AppendText("\r\n" + e.AttackerName + " is attacking !");
                     battleLog.AppendText("\r\n" + e.TargetName + " was attacked !");
                     int newHealth = e.Health * 10;
                     if (e.TargetIsHero)
@@ -177,28 +179,31 @@ namespace ksmith70DungeonFinalProject
                         // if the target is still alive update bar else make them invisible
                         if (newHealth > 0)
                         {
-                            heroPbs[e.TurnTag - 1].BackColor = Color.Yellow;
-                            progressBar1.Value = newHealth; // HARD CODED HARD CODED
+                            // heroPbs[e.TurnTag - 1].BackColor = Color.Yellow;
+                            heroHealthBars[e.TurnTag - 1].Value = newHealth; // HARD CODED HARD CODED
                             heroPbs[e.TurnTag - 1].Update();
+                            heroHealthBars[e.TurnTag - 1].Update(); // HARD CODED HARD CODED
+
 
                             // eable enemy buttons so user can select them
                             // this only works becase turn has depth of one
                             // we'd have to pass whether the next turn is a hero's one
                             // or not within the updateEventArgs
-                          /*  attackBtn.Enabled = true;
-                            defendBtn.Enabled = true;
-                            specialBtn.Enabled = true;*/
+                            /*  attackBtn.Enabled = true;
+                              defendBtn.Enabled = true;
+                              specialBtn.Enabled = true;*/
 
                             // only working with one enemy box for now
-                           /* enemyPb1.Enabled = true;
-                            enemyPb2.Enabled = true;
-                            enemyPb3.Enabled = true;*/
+                            /* enemyPb1.Enabled = true;
+                             enemyPb2.Enabled = true;
+                             enemyPb3.Enabled = true;*/
 
                         }
                         else
                         {
                             battleLog.AppendText("\r\n" + e.TargetName + " was killed !");
                             heroPbs[e.TurnTag - 1].Visible = false;
+                            heroHealthBars[e.TurnTag - 1].Value = 0;
                             progressBar1.Visible = false;
                         }
                     }
@@ -207,22 +212,25 @@ namespace ksmith70DungeonFinalProject
                         if (newHealth > 0)
                         {
                             // enemyPbs[e.TurnTag - 1].BackColor = Color.Yellow;
-                            progressBar2.Value = e.Health * 10; // HARD CODED HARD CODED (progress bar selection)
-                            enemyPbs[e.TurnTag - 1].Update();
+                            enemyHealthBars[e.TurnTag - 1].Value = newHealth; // HARD CODED HARD CODED (progress bar selection)
+                            enemyHealthBars[e.TurnTag - 1].Update(); // HARD CODED HARD CODED (progress bar selection)
+                            enemyPbs[e.TurnTag - 1].Update(); // DONT NEED ?? dont need ? its not updating anything 
                         }
                         else
                         {
                             battleLog.AppendText("\r\n" + e.TargetName + " was killed !");
                             enemyPbs[e.TurnTag - 1].Visible = false;
+                            enemyHealthBars[e.TurnTag - 1].Value = 0;
                             progressBar2.Visible = false;
                         }
                     }
                 }
                 else
                 {
-                    // if the enemy has defended update the battle log
+                    // if the hero has defended update the battle log ?? 
                     if (e.TargetIsHero)
                     {
+                        battleLog.AppendText("\r\n" + e.AttackerName + " is defending !");
                         battleLog.AppendText("\r\n" + e.TargetName + " defended !");
                     }
 
@@ -234,6 +242,24 @@ namespace ksmith70DungeonFinalProject
                 heroPbs[0].Update();
             }
            
+        }
+
+        public void BeatEncounter_Handler(object sender, EventArgs e)
+        {
+            battleLog.AppendText("\r\nYou beat the encounter ! Great job !");
+        }
+        public void LostGame_Handler(object sender, EventArgs e)
+        {
+            battleLog.AppendText("\r\nGame lost :(");
+            MessageBox.Show("You lost the game ! Good try !");
+            // disable all buttons
+            attackBtn.Enabled = false;
+            defendBtn.Enabled = false;
+            specialBtn.Enabled = false;
+
+            enemyPb1.Enabled = false;
+            enemyPb2.Enabled = false;
+            enemyPb3.Enabled = false;
         }
 
         public void ActionButtonClick_Handler(object sender, EventArgs e)
@@ -294,10 +320,20 @@ namespace ksmith70DungeonFinalProject
                     break;
 
             }
-            // enable all enemy buttons so user can select enemy
-            foreach(var enemyBox in enemyPbs)
+            // enable all enemy buttons so user can select enemy if defend was not selected
+            if (queuedAction != "Defend")
             {
-                enemyBox.Enabled = true;
+                foreach (var enemyBox in enemyPbs)
+                {
+                    enemyBox.Enabled = true;
+                }
+            }
+            // else re-enable attack so we can attack again
+            else
+            {
+                attackBtn.Enabled = true;
+                defendBtn.Enabled = true;
+                specialBtn.Enabled = true;
             }
         }
         private void EnemyPbClicked_Handler(object sender, EventArgs e)
@@ -311,6 +347,10 @@ namespace ksmith70DungeonFinalProject
             enemyPb1.Enabled = false;
             enemyPb1.Enabled = false;
             enemyPb1.Enabled = false;
+
+            attackBtn.Enabled = true;
+            defendBtn.Enabled = true;
+            specialBtn.Enabled = true;
 
         }
 

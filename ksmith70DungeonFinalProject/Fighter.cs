@@ -17,7 +17,7 @@ namespace ksmith70DungeonFinalProject
             HitPoints = 10; // everyone starts with the same hit points ?? 
             Intelligence = 5;
             MagicDefense = 5;
-            Name = "Juan";
+            Name = "Fighter Juan";
             Speed = 5;
             SpriteName = "Punch";
             Strength = 2;

@@ -13,6 +13,7 @@ namespace ksmith70DungeonFinalProject
         private bool targetIsHero;
         private string targetName;
         private bool defendWasChosen;
+        private string attackerName;
 
         // turtag not required
 
@@ -21,5 +22,6 @@ namespace ksmith70DungeonFinalProject
         public bool TargetIsHero { get => targetIsHero; set => targetIsHero = value; }
         public string TargetName { get => targetName; set => targetName = value; }
         public bool DefendWasChosen { get => defendWasChosen; set => defendWasChosen = value; }
+        public string AttackerName { get => attackerName; set => attackerName = value; }
     }
 }

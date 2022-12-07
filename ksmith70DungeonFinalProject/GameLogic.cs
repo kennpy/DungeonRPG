@@ -12,7 +12,7 @@ namespace ksmith70DungeonFinalProject
     public class GameLogic
     {
         private int currentTurn;
-        private int encounters;
+        private int encounters = 0;
 
         private List<Actor> turnOrder = new List<Actor>();
         private List<Hero> playerParty = new List<Hero>();
@@ -23,6 +23,8 @@ namespace ksmith70DungeonFinalProject
         public event EventHandler<UpdateEventArgs> Update;
         public event EventHandler<NewEncounterEventArgs> NewEncounter;
         public event EventHandler<PlayerChoiceEventArgs> PlayerChoice;
+        public event EventHandler<EventArgs> BeatEncounter;
+        public event EventHandler<EventArgs> LostGame;
 
         /*
          * CAN ADD MORE EVENTS ITS OK !!
@@ -42,15 +44,15 @@ namespace ksmith70DungeonFinalProject
 
             // select random hero to attack
             Random randGenerator = new Random();
-            int randTargetId = randGenerator.Next(1,4); // MAY NOT WORK MAY NOT WORK (range0
+            int randTargetId = randGenerator.Next(0, playerParty.Count); // MAY NOT WORK MAY NOT WORK (range0
 
-            Hero target = (Hero)turnOrder[randTargetId];
+            Hero target = (Hero)playerParty[randTargetId];
             bool targetIsAlive = false;
 
             while(!(target is Hero) && !targetIsAlive)
             {
-                randTargetId = randGenerator.Next(1, playerParty.Count + 1); // gives big value = chage to 0 or 1 (range)
-                target = (Hero)turnOrder[randTargetId];
+                randTargetId = randGenerator.Next(0, playerParty.Count); // gives big value = chage to 0 or 1 (range)
+                target = (Hero)playerParty[randTargetId];
                 if(target.HitPoints > 0)
                 {
                     targetIsAlive = true;
@@ -84,6 +86,7 @@ namespace ksmith70DungeonFinalProject
             args.Health = target.HitPoints;
             args.TurnTag = target.TagNumber;
             args.TargetName = target.Name;
+            args.AttackerName = currentEnemy.Name;
 
             // currentTurn++;
 
@@ -97,7 +100,8 @@ namespace ksmith70DungeonFinalProject
                 OnPlayerChoice(this, playerChoiceArgs);
             }
 
-            // else we attack (trigger enemy turn and repeat) ?? 
+            // check if all playerParty has been killed
+            CheckGameOver();
         }
 
         // generate new encounter based on heroes / enemies in turn order
@@ -113,26 +117,26 @@ namespace ksmith70DungeonFinalProject
 
             for (int i = 0; i < numEnemies; i++)
             {
-                int spawnChoice = random.Next(1,4);
+                int spawnChoice = random.Next(3);
                 switch (spawnChoice)
                 {
 
                     case 0:
                         Bandit bandit = new Bandit();
-                        bandit.TagNumber = i;
+                        bandit.TagNumber = i + 1;
                         turnOrder.Add(bandit);
                         enemyParty.Add(bandit);
                         break;
                     case 1:
                         Dragon dragon = new Dragon();
-                        dragon.TagNumber = i;
+                        dragon.TagNumber = i + 1;
                         turnOrder.Add(dragon);
                         enemyParty.Add(dragon);
 
                         break;
                     case 2:
                         Ogre ogre = new Ogre();
-                        ogre.TagNumber = i;
+                        ogre.TagNumber = i + 1;
                         turnOrder.Add(ogre);
                         enemyParty.Add(ogre);
 
@@ -188,75 +192,100 @@ namespace ksmith70DungeonFinalProject
                     target.IsDefending = false;
                     break;
             }
-
-            args.TargetIsHero = false;
+            // if we are attacking an enemy update with enemy values
+            if (!args.DefendWasChosen)
+            {
+                args.TargetIsHero = false;
+            }
+            else
+            {
+                args.TargetIsHero = true;
+            }
             args.Health = target.HitPoints;
             args.TurnTag = target.TagNumber; // HARD CODED HARD CODED HARD CODED
             args.TargetName = target.Name;
+            args.AttackerName = currentHero.Name;
+
+
+            // else let gui know defend was chosen so the target is the hero which selected defense
+
 
             currentTurn++;
 
             OnUpdate(this, args);
 
             // run enemy turns until it is user turn again
-            while (turnOrder[currentTurn] is Enemy)
+            while (currentTurn < turnOrder.Count && turnOrder[currentTurn] is Enemy ) // THIS IS SKETCHY (range reset - idk if this workes when someone dies)
             {
-                EnemyTurn();
-                currentTurn++;
+                // if enemy is alive, then perform an attack
+                if(turnOrder[currentTurn].HitPoints > 0)
+                {
+                    EnemyTurn();
+                    currentTurn++;
+                }
+            }
+            if(currentTurn == turnOrder.Count)
+            {
+                currentTurn = 0; // reset current turn so we repeat the loop
+            }
+
+            // check if we need to generate new level
+            if (EncounterWon())
+            {
+                StartNewLevel();
             }
 
         }
         
 
-        public void Start()
+        public void StartNewLevel()
         {
             // generate all our Actors so we can track their stats (to update gui)
             // generate a new encounter based on that actor
             currentTurn = 0;
-            GeneratePlayerParty(); // this is run ONCE since we have ONE party
             
-            // GenerateInitialTurnOrder(); // create the turn order built on top of player party
-            GenerateEncounter(); // make enemies and add to turnOrder
+            // if its the first encounter generate a new party
+            if(encounters == 0)
+            {
+                GeneratePlayerParty(); // this is run ONCE since we have ONE party
+            }
+                                   // GenerateInitialTurnOrder(); // create the turn order built on top of player party
 
+            bool lostGame = false;
+            bool wonEncounter = false;
+
+           
+                GenerateEncounter(); // make enemies and add to turnOrder
+                                     // generate event args and populate bbitmaps 
+                NewEncounterEventArgs args = new NewEncounterEventArgs();
+                for (int i = 0; i < turnOrder.Count; i++)
+                {
+                    Actor actor = turnOrder[i];
+                    if (actor is Hero)
+                    {
+                        args.HeroSprites.Add((Bitmap)(actor.Image)); // add images
+                        args.HeroHealth.Add((actor.HitPoints)); // add health
+                    }
+                    else
+                    {
+                        args.EnemySprites.Add((Bitmap)(actor.Image));
+                        args.EnemyHealth.Add((actor.HitPoints));
+                    }
+                }
+
+                OnNewEncounter(this, args);
+
+                // while there are enemies who must play their turn play their turn
+                // else we wait for user to select their turn then repeat the proces
+                while (turnOrder[currentTurn] is Enemy)
+                {
+                    EnemyTurn();
+                    currentTurn++;
+                }
+            
             // spaw heroes
 
             //generate encounter
-
-            // generate event args and populate bbitmaps 
-            NewEncounterEventArgs args = new NewEncounterEventArgs();
-            for(int i = 0; i < turnOrder.Count; i++)
-            {
-                Actor actor = turnOrder[i];
-                if(actor is Hero)
-                {
-                    args.HeroSprites.Add((Bitmap)(actor.Image)); // add images
-                    args.HeroHealth.Add((actor.HitPoints)); // add health
-                }
-                else
-                {
-                    args.EnemySprites.Add((Bitmap)(actor.Image));
-                    args.EnemyHealth.Add((actor.HitPoints));
-                }
-            }
-
-            OnNewEncounter(this, args);
-
-
-            // throw onUpdate 
-
-            // can add health and stuffonup
-
-            // while there are enemies who must play their turn play their turn
-            // else we wait for user to select their turn then repeat the proces
-            while (turnOrder[currentTurn] is Enemy)
-            {
-                EnemyTurn();
-                currentTurn++;
-            }
-
-
-
-
 
             // Actor firstActor = turnOrder[0];
             //OUTDATED
@@ -274,7 +303,7 @@ namespace ksmith70DungeonFinalProject
             }*/
         }
 
-        public async void TakeTurn(string action, int targetId, int attackerId)
+        public void TakeTurn(string action, int targetId, int attackerId)
         {
             // check who is actually taking a turn
             // well figure this out later. for now this is what we're doing
@@ -392,45 +421,43 @@ namespace ksmith70DungeonFinalProject
         private bool EncounterWon()
         {
             bool wonEncounter = false;
-            int numHeroes = 0;
-            int numDeadHeroes = 0;
             int numEnemies = 0;
             int numDeadEnemies = 0;
 
             // get num enemies and heroes
-            foreach (var actor in turnOrder)
+            foreach (var actor in enemyParty)
             {
-                if (actor is Enemy)
+                if (actor.HitPoints <= 0)
                 {
-                    if (actor.HitPoints <= 0)
-                    {
-                        numDeadEnemies++;
-                    }
-                    numEnemies++;
+                    numDeadEnemies++;
                 }
-                else
-                {
-                    if (actor.HitPoints <= 0)
-                    {
-                        numDeadHeroes++;
-                    }
-                    numHeroes++;
-                }
+                numEnemies++;
+               
             }
 
-            if(numDeadEnemies == numEnemies || numDeadHeroes == numHeroes)
+            if(numDeadEnemies == numEnemies)
             {
                 wonEncounter = true;
             }
             return wonEncounter;
         }
 
-        private bool GameWon()
+        private void CheckGameOver()
         {
-            // idk what goes in here 
-            // for now game never ends
-            return false;
-
+            // if all heroes have died end game. dungeon never ends !!!
+            int numDead = 0;
+            foreach(var hero in playerParty)
+            {
+                if(hero.HitPoints <= 0)
+                {
+                    numDead++;
+                }
+            }
+            if(numDead == playerParty.Count)
+            {
+                EventArgs args = new EventArgs();
+                OnLostGame(this, args);
+            }
         }
 
         public void UpdateGUI()
@@ -441,7 +468,7 @@ namespace ksmith70DungeonFinalProject
             // if the actor is dead or alive (health less than or equal to 0)
 
 
-            Start();
+            StartNewLevel();
 
             // dont need this since start will handle everything inlcuding generate encounter
 
@@ -465,13 +492,30 @@ namespace ksmith70DungeonFinalProject
         {
             PlayerChoice.Invoke(this, e);
         }
+        protected virtual void OnBeatEncounter(object sender, EventArgs e)
+        {
+            BeatEncounter.Invoke(this, e);
+        }
+        protected virtual void OnLostGame(object sender, EventArgs e)
+        {
+            LostGame.Invoke(this, e);
+        }
         public void OnTurnReady_Handler(object sender, TurnReadyEventArgs e)
         {
             // generate player turn
             // dont need attacker since we know that based on currentTurn
             string action = e.Attack;
             int enemyId = e.Enemy - 1; // prevent out of range error 
-            Actor enemy = enemyParty[enemyId];
+            Actor enemy;
+            if(action == "Defend")
+            {
+                enemy = playerParty[enemyId];
+
+            }
+            else
+            {
+                enemy = enemyParty[enemyId];
+            }
 
             PlayerTurn(action, enemy);
 
