@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -12,13 +13,14 @@ namespace ksmith70DungeonFinalProject
     {
         private int currentTurn;
         private int encounters;
-        private List<Actor> turnOrder;
-        private List<Hero> playerParty;
+        private List<Actor> turnOrder = new List<Actor>();
+        private List<Hero> playerParty = new List<Hero>();
 
         private const int NUM_MAX_ENEMIES = 3;
 
         public event EventHandler<UpdateEventArgs> Update;
         public event EventHandler<NewEncounterEventArgs> NewEncounter;
+        public event EventHandler<PlayerChoiceEventArgs> PlayerChoice;
 
         /*
          * CAN ADD MORE EVENTS ITS OK !!
@@ -77,7 +79,15 @@ namespace ksmith70DungeonFinalProject
 
             currentTurn++;
 
-            OnUpdate(this, args);
+            OnUpdate(this, args); // update gui
+
+            // check if next turn is player so we can enabled buttons
+            if (turnOrder[currentTurn] is Hero)
+            {
+                PlayerChoiceEventArgs playerChoiceArgs = new PlayerChoiceEventArgs();
+                playerChoiceArgs.PlayerTag = turnOrder[currentTurn].TagNumber;
+                OnPlayerChoice(this, playerChoiceArgs);
+            }
         }
 
         // generate new encounter based on heroes / enemies in turn order
@@ -96,14 +106,19 @@ namespace ksmith70DungeonFinalProject
                     case 0:
                         Bandit bandit = new Bandit();
                         bandit.TagNumber = i;
+                        turnOrder.Add(bandit);
                         break;
                     case 1:
                         Dragon dragon = new Dragon();
                         dragon.TagNumber = i;
+                        turnOrder.Add(dragon);
+
                         break;
                     case 2:
                         Ogre ogre = new Ogre();
                         ogre.TagNumber = i;
+                        turnOrder.Add(ogre);
+
                         break;
                 }
             }
@@ -188,7 +203,7 @@ namespace ksmith70DungeonFinalProject
             GeneratePlayerParty(); // this is run ONCE since we have ONE party
             
             // GenerateInitialTurnOrder(); // create the turn order built on top of player party
-            GenerateEncounter(); // 
+            GenerateEncounter(); // make enemies and add to turnOrder
 
             // spaw heroes
 
@@ -196,13 +211,22 @@ namespace ksmith70DungeonFinalProject
 
             // generate event args and populate bbitmaps 
             NewEncounterEventArgs args = new NewEncounterEventArgs();
-            foreach(var actor in turnOrder)
+            for(int i = 0; i < turnOrder.Count; i++)
             {
+                Actor actor = turnOrder[i];
                 if(actor is Hero)
                 {
-                    args.HeroSprites.Append(actor.Image);
+                    args.HeroSprites.Add((Bitmap)(actor.Image)); // add images
+                    args.HeroHealth.Add((actor.HitPoints)); // add health
+                }
+                else
+                {
+                    args.EnemySprites.Add((Bitmap)(actor.Image));
+                    args.EnemyHealth.Add((actor.HitPoints));
                 }
             }
+
+            OnNewEncounter(this, args);
 
 
             // throw onUpdate 
@@ -401,6 +425,8 @@ namespace ksmith70DungeonFinalProject
 
             Start();
 
+            // dont need this since start will handle everything inlcuding generate encounter
+
             UpdateEventArgs args = new UpdateEventArgs();
             args.TurnTag = -1;
             args.TargetIsHero = true; // ?? ?? 
@@ -408,9 +434,18 @@ namespace ksmith70DungeonFinalProject
             OnUpdate(this, args);
         }
 
+
+        protected virtual void OnNewEncounter(object sender, NewEncounterEventArgs e)
+        {
+            NewEncounter.Invoke(this, e);
+        }
         protected virtual void OnUpdate(object sender, UpdateEventArgs e)
         {
             Update.Invoke(this, e);
+        }
+        protected virtual void OnPlayerChoice(object sender, PlayerChoiceEventArgs e)
+        {
+            PlayerChoice.Invoke(this, e);
         }
         public async void OnTurnReady_Handler(object sender, TurnReadyEventArgs e)
         {

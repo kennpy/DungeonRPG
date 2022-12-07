@@ -25,6 +25,10 @@ namespace ksmith70DungeonFinalProject
 
         Bitmap[] heroSprites = new Bitmap[3];
         Bitmap[] enemySprites = new Bitmap[3];
+
+        ProgressBar[] heroHealthBars = new ProgressBar[3];
+        ProgressBar[] enemyHealthBars = new ProgressBar[3];
+
         Random random = new Random();
 
         public GameScreen()
@@ -32,7 +36,21 @@ namespace ksmith70DungeonFinalProject
             InitializeComponent();
             PrepBoard();
             SubscribeFormHandlers();
+            InstantiateProgressBars();
 
+        }
+
+        private void InstantiateProgressBars()
+        {
+            // add hero health bars
+            heroHealthBars[0] = progressBar1;
+            heroHealthBars[1] = progressBar2;
+            heroHealthBars[2] = progressBar3;
+
+            // add enemy health bars
+            enemyHealthBars[0] = progressBar4;
+            enemyHealthBars[1] = progressBar5;
+            enemyHealthBars[2] = progressBar6;
         }
 
         private void SubscribeFormHandlers()
@@ -74,12 +92,15 @@ namespace ksmith70DungeonFinalProject
         private void PrepBoard()
         {
             heroPbs.Add(heroPb1);
-            //heroPbs.Add(heroPb2);
-            //heroPbs.Add(heroPb3);
+            heroPbs.Add(heroPb2);
+            heroPbs.Add(heroPb3);
+
             enemyPbs.Add(enemyPb1);
-            //enemyPbs.Add(enemyPb2);
-            //enemyPbs.Add(enemyPb3);
+            enemyPbs.Add(enemyPb2);
+            enemyPbs.Add(enemyPb3);
         }
+
+        // update picture box and health bar for new enctouner
         public void OnNewEncounter_Handler(object sender, NewEncounterEventArgs e)
         {
             Bitmap a; // bitmap stores pixel data 
@@ -91,11 +112,33 @@ namespace ksmith70DungeonFinalProject
             {
                 // ... 
                 heroPbs[position].BackgroundImage = e.HeroSprites[position];
-
+                heroHealthBars[position].Value = e.HeroHealth[position];
+                heroPbs[position].Update();
+                heroHealthBars[position].Update();
             }
             // same with enemy spries for statement
+            for (int position = 0; position < heroPbs.Count; position++)
+            {
+                // ... 
+                enemyPbs[position].BackgroundImage = e.EnemySprites[position];
+                enemyHealthBars[position].Value = e.EnemyHealth[position];
+                enemyPbs[position].Update();
+                enemyHealthBars[position].Update();
+            }
+        }
 
-            // add health
+        public  void OnPlayerChoice_Handler(object sener, PlayerChoiceEventArgs e)
+        {
+            // enable action buttons and disable enemies
+            attackBtn.Enabled = true;
+            defendBtn.Enabled = true;
+            specialBtn.Enabled = true;
+
+            foreach(var enemyBox in enemyPbs)
+            {
+                enemyBox.Enabled = false;
+            }
+
         }
 
         public void OnUpdate_Handler(object sender, UpdateEventArgs e)
@@ -112,9 +155,6 @@ namespace ksmith70DungeonFinalProject
                 if (!e.DefendWasChosen)
                 {
                     battleLog.AppendText("\r\n" + e.TargetName + " was attacked !");
-
-
-
                     int newHealth = e.Health * 10;
                     if (e.TargetIsHero)
                     {
@@ -125,23 +165,18 @@ namespace ksmith70DungeonFinalProject
                             progressBar1.Value = newHealth; // HARD CODED HARD CODED
                             heroPbs[e.TurnTag - 1].Update();
 
-                            // enable action buttons so user can select actions in next turn
-                            /*attackBtn.Enabled = false;
-                            defendBtn.Enabled = false;
-                            specialBtn.Enabled = false;*/
-
                             // eable enemy buttons so user can select them
                             // this only works becase turn has depth of one
                             // we'd have to pass whether the next turn is a hero's one
                             // or not within the updateEventArgs
-                            enemyPb1.Enabled = true;
                             attackBtn.Enabled = true;
                             defendBtn.Enabled = true;
                             specialBtn.Enabled = true;
 
                             // only working with one enemy box for now
-                            /*enemyPb2.Enabled = true;
-                            enemyPb3.Enabled = true;*/
+                            enemyPb1.Enabled = true;
+                            enemyPb2.Enabled = true;
+                            enemyPb3.Enabled = true;
 
                         }
                         else
@@ -245,8 +280,8 @@ namespace ksmith70DungeonFinalProject
             }
             // enable all enemy buttons so user can select enemy
             enemyPb1.Enabled = true;
-            // enemyPb2.Enabled = true;
-            // enemyPb3.Enabled = true;
+            enemyPb2.Enabled = true;
+            enemyPb3.Enabled = true;
         }
         private void EnemyPbClicked_Handler(object sender, EventArgs e)
         {
@@ -256,6 +291,8 @@ namespace ksmith70DungeonFinalProject
             args.Enemy = targetTag;
 
             OnTurnReady(this, args);
+            enemyPb1.Enabled = false;
+            enemyPb1.Enabled = false;
             enemyPb1.Enabled = false;
 
         }

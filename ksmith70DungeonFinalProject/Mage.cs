@@ -15,7 +15,15 @@ namespace ksmith70DungeonFinalProject
         public Mage()
         {
             this.Image = Properties.Resources.Mage;
-
+            Defense = 8;
+            HitPoints = 10;
+            Intelligence = 3;
+            MagicDefense = 2;
+            Name = "Cool Mage";
+            Speed = 5;
+            SpriteName = "Mage";
+            Strength = 2;
+            IsDefending = false;
         }
     }
 }

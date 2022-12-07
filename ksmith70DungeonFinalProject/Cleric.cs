@@ -14,7 +14,15 @@ namespace ksmith70DungeonFinalProject
         public Cleric()
         {
             this.Image = Properties.Resources.Cleric;
-
+            Defense = 8;
+            HitPoints = 10;
+            Intelligence = 3;
+            MagicDefense = 2;
+            Name = "Big Cleric";
+            Speed = 5;
+            SpriteName = "Cleric";
+            Strength = 2;
+            IsDefending = false;
         }
     }
 }
