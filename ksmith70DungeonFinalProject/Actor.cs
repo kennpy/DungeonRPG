@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 
@@ -16,6 +17,9 @@ namespace ksmith70DungeonFinalProject
         private string spriteName;
         private int strength;
         private bool isDefending;
+        private int tagNumber;
+
+        private Image image;
 
 
         public Actor() { }
@@ -42,6 +46,8 @@ namespace ksmith70DungeonFinalProject
         public int Speed { get => speed; set => speed = value; }
         public string SpriteName { get => spriteName; set => spriteName = value; }
         public int Strength { get => strength; set => strength = value; }
+        public int TagNumber { get => tagNumber; set => tagNumber = value; }
+        public Image Image { get => image; set => image = value; }
 
         public void Attack(Actor target)
         {

@@ -20,11 +20,12 @@ namespace ksmith70DungeonFinalProject
 
             screen = new GameScreen();
             // SubscribeEvents();
+            // this is all we need 
+
             logic.Update += screen.OnUpdate_Handler;
             screen.TurnReady += logic.OnTurnReady_Handler;
+            logic.NewEncounter += screen.OnNewEncounter_Handler;
             logic.UpdateGUI();
-
-            logic.Start();
             Application.Run(screen);
 
 

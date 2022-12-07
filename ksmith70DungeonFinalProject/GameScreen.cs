@@ -16,11 +16,16 @@ namespace ksmith70DungeonFinalProject
     {
 
         private string queuedAction;
+        private int currentAttackerId;
 
         public event EventHandler<TurnReadyEventArgs> TurnReady;
 
         List<PictureBox> heroPbs = new List<PictureBox>();
         List<PictureBox> enemyPbs = new List<PictureBox>();
+
+        Bitmap[] heroSprites = new Bitmap[3];
+        Bitmap[] enemySprites = new Bitmap[3];
+        Random random = new Random();
 
         public GameScreen()
         {
@@ -75,12 +80,31 @@ namespace ksmith70DungeonFinalProject
             //enemyPbs.Add(enemyPb2);
             //enemyPbs.Add(enemyPb3);
         }
+        public void OnNewEncounter_Handler(object sender, NewEncounterEventArgs e)
+        {
+            Bitmap a; // bitmap stores pixel data 
+
+            // flag the player turn ?? w/ background color change
+
+
+            for (int position = 0; position < heroPbs.Count; position++)
+            {
+                // ... 
+                heroPbs[position].BackgroundImage = e.HeroSprites[position];
+
+            }
+            // same with enemy spries for statement
+
+            // add health
+        }
 
         public void OnUpdate_Handler(object sender, UpdateEventArgs e)
         {
+
             // check if its a hero or an enemy
             // update the correct one
 
+            currentAttackerId = e.TurnTag;
 
             if (e.TurnTag != -1)
             {
@@ -153,7 +177,7 @@ namespace ksmith70DungeonFinalProject
 
                 }
             }
-            else // the hero goes first (we change later)
+            else // the hero goes first (we change later to select first hero / enemy (based on turn tag -- )
             {
                 heroPbs[0].BackColor = Color.Yellow;
                 heroPbs[0].Update();
@@ -164,6 +188,7 @@ namespace ksmith70DungeonFinalProject
         public void ActionButtonClick_Handler(object sender, EventArgs e)
         {
             string action = ((Button)sender).Tag.ToString();
+
             switch (action)
             {
                 case "Attack":
@@ -229,6 +254,7 @@ namespace ksmith70DungeonFinalProject
             TurnReadyEventArgs args = new TurnReadyEventArgs();
             args.Attack = queuedAction;
             args.Enemy = targetTag;
+
             OnTurnReady(this, args);
             enemyPb1.Enabled = false;
 

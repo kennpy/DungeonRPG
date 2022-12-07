@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 
@@ -12,6 +13,8 @@ namespace ksmith70DungeonFinalProject
         private bool targetIsHero;
         private string targetName;
         private bool defendWasChosen;
+
+        // turtag not required
 
         public int TurnTag { get => turnTag; set => turnTag = value; }
         public int Health { get => health; set => health = value; }
