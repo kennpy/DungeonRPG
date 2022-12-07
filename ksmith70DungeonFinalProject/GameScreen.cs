@@ -204,7 +204,7 @@ namespace ksmith70DungeonFinalProject
                             battleLog.AppendText("\r\n" + e.TargetName + " was killed !");
                             heroPbs[e.TurnTag - 1].Visible = false;
                             heroHealthBars[e.TurnTag - 1].Value = 0;
-                            progressBar1.Visible = false;
+                            heroHealthBars[e.TurnTag - 1].Visible = false;
                         }
                     }
                     else
@@ -221,7 +221,7 @@ namespace ksmith70DungeonFinalProject
                             battleLog.AppendText("\r\n" + e.TargetName + " was killed !");
                             enemyPbs[e.TurnTag - 1].Visible = false;
                             enemyHealthBars[e.TurnTag - 1].Value = 0;
-                            progressBar2.Visible = false;
+                            enemyHealthBars[e.TurnTag - 1].Visible = false;
                         }
                     }
                 }
@@ -278,7 +278,10 @@ namespace ksmith70DungeonFinalProject
 
                     foreach(var enemy in enemyPbs)
                     {
-                        enemy.BackColor = Color.Red;
+                        if(enemy.Visible)
+                        {
+                            enemy.BackColor = Color.Red;
+                        }
                     }
 
                     break;
@@ -325,7 +328,10 @@ namespace ksmith70DungeonFinalProject
             {
                 foreach (var enemyBox in enemyPbs)
                 {
-                    enemyBox.Enabled = true;
+                    if (enemyBox.Visible)
+                    {
+                        enemyBox.Enabled = true;
+                    }
                 }
             }
             // else re-enable attack so we can attack again
