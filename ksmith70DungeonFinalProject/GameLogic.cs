@@ -133,15 +133,20 @@ namespace ksmith70DungeonFinalProject
             Random random = new Random();
 
             // get rid of any old enemies that may be present
+            int initialSize = turnOrder.Count;
+            List<int> indexesToRemove = new List<int>();
 
             // clear turn party of enemies
-            for (int i = 0; i < turnOrder.Count; i++)
+            /*for (int i = 0; i < initialSize; i++)
             {
                 if(turnOrder[i] is Enemy)
                 {
-                    turnOrder.Remove(turnOrder[i]);
+                    indexesToRemove.Add(i);
                 }
-            }
+            }*/
+            turnOrder.RemoveAll(IsEnemy);
+            
+
             // clear enemyParty of enemies
             enemyParty.Clear();
 
@@ -193,6 +198,10 @@ namespace ksmith70DungeonFinalProject
             // if its the first turn then populate the turnOrder
         }
 
+        private bool IsEnemy(Actor actor)
+        {
+            return actor is Enemy;
+        }
 
         public void PlayerTurn(string action, Actor target) {
 
@@ -258,8 +267,8 @@ namespace ksmith70DungeonFinalProject
                 if(turnOrder[currentTurn].HitPoints > 0)
                 {
                     EnemyTurn();
-                    currentTurn++;
                 }
+                currentTurn++;
             }
             if(currentTurn == turnOrder.Count)
             {
@@ -269,12 +278,14 @@ namespace ksmith70DungeonFinalProject
             // check if we need to generate new level
             if (EncounterWon())
             {
+                EventArgs beatEncounterArgs = new EventArgs();
+                OnBeatEncounter(this, beatEncounterArgs);
                 StartNewLevel();
             }
 
-        }
-        
 
+        }
+       
         public void StartNewLevel()
         {
             // generate all our Actors so we can track their stats (to update gui)
@@ -319,25 +330,7 @@ namespace ksmith70DungeonFinalProject
                         currentTurn++;
                     }
                 }
-            
-            // spaw heroes
-
-            //generate encounter
-
-            // Actor firstActor = turnOrder[0];
-            //OUTDATED
-            /*while (GameWon() == false)
-            {
-                GenerateEncounter();
-                // SortTurnOrder(); 
-
-                // while encounter is not over keep taking turns
-                while (EncounterWon() == false)
-                {
-                    TakeTurn();
-
-                }
-            }*/
+           
         }
 
 
@@ -482,12 +475,12 @@ namespace ksmith70DungeonFinalProject
             Actor enemy;
             if(action == "Defend")
             {
-                enemy = playerParty[enemyId];
+                enemy = (Actor)playerParty[enemyId];
 
             }
             else
             {
-                enemy = enemyParty[enemyId];
+                enemy = (Actor)enemyParty[enemyId];
             }
 
             PlayerTurn(action, enemy);

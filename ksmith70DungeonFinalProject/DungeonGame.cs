@@ -26,6 +26,8 @@ namespace ksmith70DungeonFinalProject
             screen.TurnReady += logic.OnTurnReady_Handler;
             logic.NewEncounter += screen.OnNewEncounter_Handler;
             logic.PlayerChoice += screen.OnPlayerChoice_Handler;
+            logic.LostGame += screen.OnLostGame_Handler;
+            logic.BeatEncounter += screen.OnBeatEncounter_Handler;
 
             logic.UpdateGUI();
             Application.Run(screen);
