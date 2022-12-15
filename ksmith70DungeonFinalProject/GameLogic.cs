@@ -659,7 +659,7 @@ namespace ksmith70DungeonFinalProject
         {
             // get the action data
             string action = e.Attack;
-            int enemyId = e.Enemy - 1; // prevent out of range error 
+            int enemyId = e.Enemy - 1; 
             
             // select the actor to attack 
             Actor enemy;
@@ -674,7 +674,7 @@ namespace ksmith70DungeonFinalProject
             // prevent out of bounds error
             if (currentTurn >= turnOrder.Count)
             {
-                currentTurn = 1; 
+                currentTurn = 0; 
             }
 
             // Perform the player actoin
