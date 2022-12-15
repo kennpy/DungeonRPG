@@ -19,7 +19,7 @@ namespace ksmith70DungeonFinalProject
             HitPoints = 10;
             Intelligence = 3;
             MagicDefense = 2;
-            Name = "Cool Mage";
+            Name = "Feet Enthusiast";
             Speed = 8;
             SpriteName = "Mage";
             Strength = 2;

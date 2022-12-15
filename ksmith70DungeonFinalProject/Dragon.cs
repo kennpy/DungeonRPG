@@ -17,7 +17,7 @@ namespace ksmith70DungeonFinalProject
             HitPoints = 10;
             Intelligence = 3;
             MagicDefense = 2;
-            Name = "Boss Baby Dragon";
+            Name = "Sick Sinner";
             Speed = 9;
             SpriteName = "Dragon";
             Strength = 2;

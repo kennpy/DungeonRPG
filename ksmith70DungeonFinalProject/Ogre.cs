@@ -15,7 +15,7 @@ namespace ksmith70DungeonFinalProject
             HitPoints = 10;
             Intelligence = 3;
             MagicDefense = 2;
-            Name = "Bad Ogre";
+            Name = "Da-Baby";
             Speed = 7;
             SpriteName = "Ogre";
             Strength = 2;

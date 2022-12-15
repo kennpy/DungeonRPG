@@ -20,7 +20,7 @@ namespace ksmith70DungeonFinalProject
             HitPoints = 10;
             Intelligence = 3;
             MagicDefense = 2;
-            Name = "Scary Bandit";
+            Name = "Jerry";
             Speed = 5;
             SpriteName = "Bandit";
             Strength = 2;

@@ -106,9 +106,9 @@ namespace ksmith70DungeonFinalProject
                     if(target.HitPoints <= 0)
                     {
                         playerParty.Remove(target);
-                        turnOrder.Remove(target);
+                        // turnOrder.Remove(target);
                         // decrement so we are not one ahead in turn order
-                        currentTurn = currentTurn - 1; 
+                        //currentTurn = currentTurn - 1; 
                     }
                     break;
                 case "Defend":
@@ -222,7 +222,7 @@ namespace ksmith70DungeonFinalProject
         {
             // if the current hero is alive then attack
             // current hero decided by current turn state
-            
+
             Hero currentHero = (Hero)turnOrder[currentTurn];
             
             // ADD HERE
@@ -239,7 +239,7 @@ namespace ksmith70DungeonFinalProject
                 MakeHeroDefenseArgs(currentHero, args);
             }
 
-            currentTurn++;
+            currentTurn++; // so they don't attack twice
             OnUpdate(this, args);
             // Attack player until it's their turn again
             AttackPlayerConsecutively();
@@ -250,6 +250,8 @@ namespace ksmith70DungeonFinalProject
                 {
                     currentTurn = 0;
                 }
+                IncrementTurnCounter();
+                AttackPlayerConsecutively();
                 RaiseCurrentAttacker();
 
                 // check if we need to generate new level
@@ -265,7 +267,20 @@ namespace ksmith70DungeonFinalProject
 
         }
 
-        private static void PerformAction(string action, Actor target, Hero currentHero, UpdateEventArgs args)
+        private void IncrementTurnCounter()
+        {
+            // while the next actor in the list is dead increment
+            while (turnOrder[currentTurn].HitPoints <= 0)
+            {
+                currentTurn++;
+                if (currentTurn == turnOrder.Count)
+                {
+                    currentTurn = 0;
+                }
+            }
+        }
+
+        private void PerformAction(string action, Actor target, Hero currentHero, UpdateEventArgs args)
         {
             switch (action)
             {
@@ -286,6 +301,12 @@ namespace ksmith70DungeonFinalProject
                     target.IsDefending = false;
                     break;
             }
+            if(target.HitPoints <= 0 && target is Enemy)
+            {
+                // currentTurn = currentTurn - 1;
+                //enemyParty.Remove((Enemy)target);
+                // turnOrder.Remove(target);
+            }
         }
 
         private static void MakeHeroDefenseArgs(Hero currentHero, UpdateEventArgs args)
@@ -305,6 +326,8 @@ namespace ksmith70DungeonFinalProject
             args.TargetName = target.Name;
             args.AttackerName = currentHero.Name;
         }
+
+
 
         private void UpdateGameStats()
         {
@@ -398,8 +421,15 @@ namespace ksmith70DungeonFinalProject
 
                 // check if next turn is player so we can enabled buttons
                 // and allow the correct box to be highlighted
-
+                if (currentTurn == turnOrder.Count)
+                {
+                    currentTurn = 0;
+                }
                 RaiseCurrentAttacker();
+            }
+            if (currentTurn == turnOrder.Count)
+            {
+                currentTurn = 0;
             }
         }
 
@@ -565,7 +595,6 @@ namespace ksmith70DungeonFinalProject
             if(action == "Defend")
             {
                 enemy = (Actor)playerParty[enemyId];
-
             }
             else
             {

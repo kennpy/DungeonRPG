@@ -18,7 +18,7 @@ namespace ksmith70DungeonFinalProject
             HitPoints = 10;
             Intelligence = 3;
             MagicDefense = 2;
-            Name = "Big Cleric";
+            Name = "Sad Nike Promotion";
             Speed = 5;
             SpriteName = "Cleric";
             Strength = 2;
