@@ -549,6 +549,7 @@ namespace ksmith70DungeonFinalProject
         }
 
         /// <summary>
+        /// High score button click handler
         /// Displays current high score based on number of encounters won
         /// </summary>
         /// <param name="sender"></param>
