@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Drawing.Text;
+using System.IO;
 using System.Linq;
 using System.Runtime.Remoting.Channels;
 using System.Text;
@@ -37,7 +38,6 @@ namespace ksmith70DungeonFinalProject
             PrepBoard();
             SubscribeFormHandlers();
             InstantiateProgressBars();
-
         }
 
         private void InstantiateProgressBars()
@@ -112,15 +112,12 @@ namespace ksmith70DungeonFinalProject
             // delete all enemyPbs (outdate) and replace
             // unsibscribe enemyPb click handlers and re-enable for ones with enemies
 
-            foreach (var enemyBox in enemyPbs)
-            {
-                // enemyBox.BackgroundImage = Image. ?? 
-                //enemyBox.Visible = false;
-                enemyBox.Click -= EnemyPbClicked_Handler;
-            }
+            // reset enemy handlers, picture boxes, and progress bars
+            RemoveEnemyClickHandlers();
+            HideEnemyPictureBoxes();
+            HideEnemyProgressBars();
 
-
-            for (int position = 0; position < heroPbs.Count; position++)
+            for (int position = 0; position < e.HeroSprites.Count; position++)
             {
                 SetInitialHeroState(e, position);
             }
@@ -132,19 +129,41 @@ namespace ksmith70DungeonFinalProject
             }
         }
 
+        private void RemoveEnemyClickHandlers()
+        {
+            foreach (var enemyBox in enemyPbs)
+            {
+                enemyBox.Click -= EnemyPbClicked_Handler;
+            }
+        }
+
         private void SetInitialEnemyState(NewEncounterEventArgs e, int position)
         {
             enemyPbs[position].Visible = true;
             enemyHealthBars[position].Visible = true;
             enemyPbs[position].BackgroundImage = e.EnemySprites[position];
             enemyHealthBars[position].Value = e.EnemyHealth[position] * 10;
-            enemyPbs[position].Update();
-            enemyHealthBars[position].Update();
             enemyPbs[position].Click += EnemyPbClicked_Handler;
             enemyPbs[position].Enabled = false;
+            enemyPbs[position].Update();
+            enemyHealthBars[position].Update();
 
         }
 
+        private void HideEnemyProgressBars()
+        {
+            foreach (var bar in enemyHealthBars)
+            {
+                bar.Visible = false;
+            }
+        }
+        private void HideEnemyPictureBoxes()
+        {
+            foreach(var box in enemyPbs)
+            {
+                box.Visible = false;
+            }
+        }
         private void SetInitialHeroState(NewEncounterEventArgs e, int position)
         {
             if (e.HeroHealth[position] > 0)
@@ -160,9 +179,18 @@ namespace ksmith70DungeonFinalProject
         public  void OnPlayerChoice_Handler(object sener, PlayerChoiceEventArgs e)
         {
             // enable action buttons and disable enemies
-            attackBtn.Enabled = true;
-            defendBtn.Enabled = true;
-            specialBtn.Enabled = true;
+            ToggleActionBtnEnable(true);
+
+            ResetPictureBoxBackgrounds();
+
+            if (e.AttackerIsEnemy)
+            {
+                heroPbs[e.PlayerTag - 1].BackColor = Color.Yellow;
+            }
+            else
+            {
+                enemyPbs[e.PlayerTag - 1].BackColor = Color.Yellow;
+            }
 
             // already disabled upon enemyPbClick so dont need to re-disable (i think)
             // THIS WAS NOT ENABLED ORIGINALLY
@@ -183,7 +211,7 @@ namespace ksmith70DungeonFinalProject
 
             if (e.TurnTag != -1)
             {
-                UpdateAttackerBackground(e);
+                // UpdateAttackerBackground(e); 
                 if (!e.DefendWasChosen)
                 {
                     ShowAttack(e);
@@ -242,6 +270,20 @@ namespace ksmith70DungeonFinalProject
             return newHealth;
         }
 
+        private void ResetPictureBoxBackgrounds()
+        {
+            foreach(var heroPb in heroPbs)
+            {
+                heroPb.BackColor = Color.Transparent;
+                heroPb.Update();
+            }
+            foreach(var enemyPb in enemyPbs)
+            {
+                enemyPb.BackColor = Color.Transparent;
+                enemyPb.Update();
+            }
+        }
+
         private void UpdateEnemyPlayerBox(UpdateEventArgs e, int newHealth)
         {
             if (newHealth > 0)
@@ -279,7 +321,7 @@ namespace ksmith70DungeonFinalProject
                 heroHealthBars[e.TurnTag - 1].Visible = false;
             }
         }
-
+        
         private void UpdateAttackerBackground(UpdateEventArgs e)
         {
             if (e.TargetIsHero)
@@ -326,13 +368,23 @@ namespace ksmith70DungeonFinalProject
             MessageBox.Show("You lost the game ! Good try !");
             // disable all buttons
             // RE ENABLED
-            attackBtn.Enabled = false;
-            defendBtn.Enabled = false;
-            specialBtn.Enabled = false;
+            ToggleActionBtnEnable(false);
+            ToggleEnemyPictureBoxEnable(false);
+        }
 
-            enemyPb1.Enabled = false;
-            enemyPb2.Enabled = false;
-            enemyPb3.Enabled = false;
+        private void ToggleActionBtnEnable(bool newValue)
+        {
+            attackBtn.Enabled = newValue;
+            defendBtn.Enabled = newValue;
+            specialBtn.Enabled = newValue;
+        }
+
+        private void ToggleEnemyPictureBoxEnable(bool newValue)
+        {
+            foreach(var box in enemyPbs)
+            {
+                box.Enabled = newValue;
+            }
         }
 
         public void ActionButtonClick_Handler(object sender, EventArgs e)
@@ -386,9 +438,7 @@ namespace ksmith70DungeonFinalProject
 
             }
 
-            attackBtn.Enabled = false;
-            defendBtn.Enabled = false;
-            specialBtn.Enabled = false;
+            ToggleActionBtnEnable(false);
 
             // enable all enemy buttons so user can select enemy if defend was not selected
             if (queuedAction != "Defend")
@@ -404,9 +454,7 @@ namespace ksmith70DungeonFinalProject
             // else re-enable attack so we can attack again
             else
             {
-                attackBtn.Enabled = true;
-                defendBtn.Enabled = true;
-                specialBtn.Enabled = true;
+                ToggleActionBtnEnable(true);
             }
         }
         private void EnemyPbClicked_Handler(object sender, EventArgs e)
@@ -418,20 +466,40 @@ namespace ksmith70DungeonFinalProject
 
             OnTurnReady(this, args);
             // RE ENABLE
-            /*enemyPb1.Enabled = false;
-            enemyPb1.Enabled = false;
-            enemyPb1.Enabled = false;*/
+            ToggleEnemyPictureBoxEnable(false);
 
-            /*attackBtn.Enabled = true;
-            defendBtn.Enabled = true;
-            specialBtn.Enabled = true;*/
+            ToggleActionBtnEnable(true);
 
         }
 
+        private void toolStripDropDownButton1Clicked_Handler(object sender, EventArgs e)
+        {
+            // get high score
+            // string score =
+            // display high score
+            // IDK HOW TO DO THIS
+        }
         protected virtual void OnTurnReady(object sender, TurnReadyEventArgs e)
         {
             TurnReady.Invoke(this, e);
 
+        }
+
+        private void toolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void toolStripDropDownButton1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            StreamReader reader = new StreamReader("high_score.txt");
+            string highscore = reader.ReadLine();
+            MessageBox.Show("Highscore : " + highscore);
         }
     }
 }

@@ -20,7 +20,7 @@ namespace ksmith70DungeonFinalProject
             Name = "Fighter Juan";
             Speed = 5;
             SpriteName = "Punch";
-            Strength = 2;
+            Strength = 100;
             IsDefending = false;
 
             this.Image = Properties.Resources.Fighter;

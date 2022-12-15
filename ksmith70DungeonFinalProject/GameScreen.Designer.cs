@@ -46,6 +46,8 @@
             this.progressBar4 = new System.Windows.Forms.ProgressBar();
             this.progressBar5 = new System.Windows.Forms.ProgressBar();
             this.progressBar6 = new System.Windows.Forms.ProgressBar();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.heroPb1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.heroPb2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.heroPb3)).BeginInit();
@@ -220,6 +222,24 @@
             this.progressBar6.TabIndex = 14;
             this.progressBar6.Value = 100;
             // 
+            // toolStrip1
+            // 
+            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(800, 25);
+            this.toolStrip1.TabIndex = 15;
+            this.toolStrip1.Text = "toolStrip1";
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(0, 0);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(127, 23);
+            this.button1.TabIndex = 16;
+            this.button1.Text = "View High Score";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // GameScreen
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -227,6 +247,8 @@
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.progressBar6);
             this.Controls.Add(this.progressBar5);
             this.Controls.Add(this.progressBar4);
@@ -274,6 +296,8 @@
         private System.Windows.Forms.ProgressBar progressBar4;
         private System.Windows.Forms.ProgressBar progressBar5;
         private System.Windows.Forms.ProgressBar progressBar6;
+        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.Button button1;
     }
 }
 
