@@ -532,6 +532,7 @@ namespace ksmith70DungeonFinalProject
         {
             for (int i = 0; i < turnOrder.Count; i++)
             {
+                // populate the args with actor data
                 Actor actor = turnOrder[i];
                 if (actor is Hero)
                 {
@@ -546,49 +547,55 @@ namespace ksmith70DungeonFinalProject
             }
         }
 
-
-        
+        /// <summary>
+        /// Generates new player party adding them to turOrder and playerParty
+        /// </summary>
         private void GeneratePlayerParty()
         {
-            // populate turn order with newly made actor party
-
+            // populate turn order and player party with newly made heroes
+            // heroes are fighter mage and cleric by default
             Fighter fighter = new Fighter();
             Mage mage = new Mage();
             Cleric cleric = new Cleric();
 
+            // tag numbers so we know what box they belong to
             fighter.TagNumber = 1;
             mage.TagNumber = 2;
             cleric.TagNumber = 3;
 
+            // add to turn order so they can play
             turnOrder.Add(fighter);
             turnOrder.Add(mage);
             turnOrder.Add(cleric);
 
+            // add to player party so we can track who is alive
             playerParty.Add(fighter);
             playerParty.Add(mage);
             playerParty.Add(cleric);
 
         }
 
+        /// <summary>
+        /// Sort the turn order based on speed ascending
+        /// </summary>
         private void SortTurnOrder()
         {
-            // foreach actor in turnOrder order by speed using bubble sort
-            int[] sortedArr = new int[turnOrder.Count];
-            for(int i = 0; i < turnOrder.Count; i++)
-            {
-                sortedArr[i] = turnOrder[i].Speed;
-            }
-            //BubbleSort(sortedArr, sortedArr.Length);
+            // sort by speed
             turnOrder = turnOrder.OrderBy(actor => actor.Speed).ToList();
         }
-    
+        
+        /// <summary>
+        /// Chekcs if an encounter has been won
+        /// based on number of dead enemies
+        /// </summary>
+        /// <returns>True if encounter is won, false if otherwise</returns>
         private bool EncounterWon()
         {
             bool wonEncounter = false;
             int numEnemies = 0;
             int numDeadEnemies = 0;
 
-            // get num enemies and heroes
+            // count number of dead enemies and see if all have died
             foreach (var actor in enemyParty)
             {
                 if (actor.HitPoints <= 0)
@@ -596,7 +603,6 @@ namespace ksmith70DungeonFinalProject
                     numDeadEnemies++;
                 }
                 numEnemies++;
-               
             }
 
             if(numDeadEnemies == numEnemies)
@@ -606,10 +612,15 @@ namespace ksmith70DungeonFinalProject
             return wonEncounter;
         }
 
+        /// <summary>
+        /// Checks if game is over based on number of dead heroes
+        /// Invokes LostGame event if game has been lost
+        /// </summary>
         private void CheckGameOver()
         {
-            // if all heroes have died end game. dungeon never ends !!!
             int numDead = 0;
+            
+            // if all heroes have died invoke LostGame event
             foreach (var hero in playerParty)
             {
                 if (hero.HitPoints <= 0)
@@ -623,66 +634,36 @@ namespace ksmith70DungeonFinalProject
                 EventArgs args = new EventArgs();
                 OnLostGame(this, args);
             }
-
-            // NEW CODE
-
-            /*if(playerParty.Count == 0)
-            {
-                gameIsOver = true;
-                EventArgs args = new EventArgs();
-                OnLostGame(this, args);
-            }*/
-
         }
 
-        public void UpdateGUI()
+        /// <summary>
+        /// Begins the game, creating a new level and setting initial gui state
+        /// </summary>
+        public void BeginGame()
         {
-            // pass whether its a hero or enemy turn,
-            // their tag number so we kno which one to update
-            // their health status so we can update the health bar accordingly
-            // if the actor is dead or alive (health less than or equal to 0)
-
-
+            // create a new level and set initial gui state
             StartNewLevel();
-
-            // dont need this since start will handle everything inlcuding generate encounter
-
             UpdateEventArgs args = new UpdateEventArgs();
             args.TurnTag = -1;
-            args.TargetIsHero = true; // ?? ?? 
-
+            args.TargetIsHero = true;
             OnUpdate(this, args);
         }
 
-
-        protected virtual void OnNewEncounter(object sender, NewEncounterEventArgs e)
-        {
-            NewEncounter.Invoke(this, e);
-        }
-        protected virtual void OnUpdate(object sender, UpdateEventArgs e)
-        {
-            Update.Invoke(this, e);
-        }
-        protected virtual void OnCurrentAttacker(object sender, CurrentAttackerEventArgs e)
-        {
-            CurrentAttacker.Invoke(this, e);
-        }
-        protected virtual void OnBeatEncounter(object sender, EventArgs e)
-        {
-            BeatEncounter.Invoke(this, e);
-        }
-        protected virtual void OnLostGame(object sender, EventArgs e)
-        {
-            LostGame.Invoke(this, e);
-        }
+        /// <summary>
+        /// Handles TurnReady event from gui.
+        /// Selects target and performs specified action.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void OnTurnReady_Handler(object sender, TurnReadyEventArgs e)
         {
-            // generate player turn
-            // dont need attacker since we know that based on currentTurn
+            // get the action data
             string action = e.Attack;
             int enemyId = e.Enemy - 1; // prevent out of range error 
+            
+            // select the actor to attack 
             Actor enemy;
-            if(action == "Defend")
+            if (action == "Defend")
             {
                 enemy = (Actor)playerParty[enemyId];
             }
@@ -690,15 +671,64 @@ namespace ksmith70DungeonFinalProject
             {
                 enemy = (Actor)enemyParty[enemyId];
             }
-            if(currentTurn >= turnOrder.Count)
+            // prevent out of bounds error
+            if (currentTurn >= turnOrder.Count)
             {
-                currentTurn = 1; // USED TO BE 0
+                currentTurn = 1; 
             }
 
+            // Perform the player actoin
             PlayerTurn(action, enemy);
-
         }
 
+        /// <summary>
+        /// Invokes NewEncounter telling gui details of new encounter
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected virtual void OnNewEncounter(object sender, NewEncounterEventArgs e)
+        {
+            NewEncounter.Invoke(this, e);
+        }
 
+        /// <summary>
+        /// Invokes Update telling gui how to update actor data
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected virtual void OnUpdate(object sender, UpdateEventArgs e)
+        {
+            Update.Invoke(this, e);
+        }
+
+        /// <summary>
+        /// Invokes CurrentAttacker telling gui who is attacking
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected virtual void OnCurrentAttacker(object sender, CurrentAttackerEventArgs e)
+        {
+            CurrentAttacker.Invoke(this, e);
+        }
+
+        /// <summary>
+        /// Invokes BeatEncounter telling gui encounter has been won
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected virtual void OnBeatEncounter(object sender, EventArgs e)
+        {
+            BeatEncounter.Invoke(this, e);
+        }
+
+        /// <summary>
+        /// Invokes LostGame telling gui game has been lost
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected virtual void OnLostGame(object sender, EventArgs e)
+        {
+            LostGame.Invoke(this, e);
+        }
     }
 }

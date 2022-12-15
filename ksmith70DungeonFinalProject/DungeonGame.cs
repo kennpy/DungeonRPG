@@ -29,11 +29,8 @@ namespace ksmith70DungeonFinalProject
             logic.LostGame += screen.OnLostGame_Handler;
             logic.BeatEncounter += screen.OnBeatEncounter_Handler;
 
-            logic.UpdateGUI();
+            logic.BeginGame();
             Application.Run(screen);
-
-
-
         }
     }
 }
