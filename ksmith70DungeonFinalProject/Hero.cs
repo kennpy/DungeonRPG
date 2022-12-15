@@ -1,20 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace ksmith70DungeonFinalProject
+﻿namespace ksmith70DungeonFinalProject
 {
+    /// <summary>
+    /// Author : Kenji Smith
+    /// Generic hero class where specify a special attack
+    /// </summary>
     public class Hero : Actor
     {
-        private string specialName;
-        private int skillPoints;
+        public Hero() {}
 
-        public Hero() 
-        {
-            
-        }
-
+        /// <summary>
+        /// Perform special attack on the specified target
+        /// </summary>
+        /// <param name="target">The target to attack</param>
         public void Special(Actor target)
         {
             // calculate damage and deduct proper attribute

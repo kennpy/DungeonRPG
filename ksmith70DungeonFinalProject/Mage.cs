@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Drawing;
-
-namespace ksmith70DungeonFinalProject
+﻿namespace ksmith70DungeonFinalProject
 {
+    /// <summary>
+    /// Author : Kenji Smith
+    /// Generic mage class where we set mage stats
+    /// </summary>
     public class Mage : Hero
     {
-/*        Image image = Properties.Resources.Mage;
-
-        public Image Image { get => image; set => image = value; }*/
-
         public Mage()
         {
             this.Image = Properties.Resources.Mage;

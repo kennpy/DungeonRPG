@@ -1,12 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ksmith70DungeonFinalProject
 {
-    public class CurrentAttackerEventArgs
+    /// <summary>
+    /// Author : Kenji Smith
+    /// Args which store the tag of the actor who is going and whether
+    /// the actor is hero or not
+    /// </summary>
+    public class CurrentAttackerEventArgs : EventArgs
     {
         private int playerTag;
         private bool attackerIsHero;

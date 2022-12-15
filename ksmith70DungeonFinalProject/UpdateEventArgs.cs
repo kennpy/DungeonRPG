@@ -6,6 +6,12 @@ using System.Text;
 
 namespace ksmith70DungeonFinalProject
 {
+    /// <summary>
+    /// Author : Kenji Smith
+    /// Event args storing the details of an attack.
+    /// This includes whos turn it is, health, target,
+    /// name, whether action is defense and name of attacker
+    /// </summary>
     public class UpdateEventArgs : EventArgs
     {
         private int turnTag;
@@ -14,8 +20,6 @@ namespace ksmith70DungeonFinalProject
         private string targetName;
         private bool defendWasChosen;
         private string attackerName;
-
-        // turtag not required
 
         public int TurnTag { get => turnTag; set => turnTag = value; }
         public int Health { get => health; set => health = value; }

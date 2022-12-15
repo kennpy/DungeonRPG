@@ -1,18 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Drawing;
-
-
-namespace ksmith70DungeonFinalProject
+﻿namespace ksmith70DungeonFinalProject
 {
+    /// <summary>
+    /// Author : Kenji Smith
+    /// Generic bandit class where we set bandit stats
+    /// </summary>
     public class Bandit : Enemy
     {
-        /*Image image = Properties.Resources.Bandit; 
-
-        public Image Image { get => image; set => image = value; }*/
-
         public Bandit()
         {
             this.Image = Properties.Resources.Bandit;

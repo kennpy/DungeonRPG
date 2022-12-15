@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Drawing;
-
-namespace ksmith70DungeonFinalProject
+﻿namespace ksmith70DungeonFinalProject
 {
+    /// <summary>
+    /// Author : Kenji Smith
+    /// Generic cleric class where we set cleric stats
+    /// </summary>
     public class Cleric : Hero
     {
-        /*Image image = Properties.Resources.Cleric;
-
-        public Image Image { get => image; set => image = value; }*/
         public Cleric()
         {
             this.Image = Properties.Resources.Cleric;

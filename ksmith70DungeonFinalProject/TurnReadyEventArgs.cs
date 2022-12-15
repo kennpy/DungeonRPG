@@ -1,11 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ksmith70DungeonFinalProject
 {
+    /// <summary>
+    /// Author : Kenji Smith
+    /// Event args which store the tag of the actor who is going and whether
+    /// the actor is hero or not (attack and enemy respectively)
+    /// </summary>
     public class TurnReadyEventArgs : EventArgs
     {
         private string attack;

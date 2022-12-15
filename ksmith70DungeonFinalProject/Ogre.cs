@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Drawing;
-
-namespace ksmith70DungeonFinalProject
+﻿namespace ksmith70DungeonFinalProject
 {
+    /// <summary>
+    /// Author : Kenji Smith
+    /// Generic ogre class where we set ogre stats
+    /// </summary>
     public class Ogre : Enemy
     {
         public Ogre()
@@ -21,8 +19,5 @@ namespace ksmith70DungeonFinalProject
             Strength = 2;
             IsDefending = false;
         }
-        /*Image image = Properties.Resources.Ogre;
-
-        public Image Image { get => image; set => image = value; }*/
     }
 }

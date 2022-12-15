@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Drawing;
-
-namespace ksmith70DungeonFinalProject
+﻿namespace ksmith70DungeonFinalProject
 {
+    /// <summary>
+    /// Author : Kenji Smith
+    /// Generic fighter class where we set fighter stats
+    /// </summary>
     public class Fighter : Hero
     {
         public Fighter() {
@@ -18,7 +16,6 @@ namespace ksmith70DungeonFinalProject
             SpriteName = "Punch";
             Strength = 4;
             IsDefending = false;
-
             this.Image = Properties.Resources.Fighter;
         }
 

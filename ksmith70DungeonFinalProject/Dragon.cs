@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Drawing;
-
-namespace ksmith70DungeonFinalProject
+﻿namespace ksmith70DungeonFinalProject
 {
+    /// <summary>
+    /// Author : Kenji Smith
+    /// Generic dragon class where we set dragon stats
+    /// </summary>
     public class Dragon : Enemy
     {
- /*       Image image = Properties.Resources.Dragon; 
-
-        public Image Image { get => image; set => image = value; }*/
         public Dragon()
         {
             Defense = 8;
@@ -22,9 +17,7 @@ namespace ksmith70DungeonFinalProject
             SpriteName = "Dragon";
             Strength = 2;
             IsDefending = false;
-
             this.Image = Properties.Resources.Dragon;
-
         }
 
     }
