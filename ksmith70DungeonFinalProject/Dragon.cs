@@ -18,7 +18,7 @@ namespace ksmith70DungeonFinalProject
             Intelligence = 3;
             MagicDefense = 2;
             Name = "Boss Baby Dragon";
-            Speed = 5;
+            Speed = 9;
             SpriteName = "Dragon";
             Strength = 2;
             IsDefending = false;

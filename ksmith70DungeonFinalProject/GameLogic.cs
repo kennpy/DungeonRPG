@@ -14,6 +14,7 @@ namespace ksmith70DungeonFinalProject
     {
         private int currentTurn;
         private int encounters = 0;
+        private bool gameIsOver = false;
 
         private const string HIGH_SCORE_FILE_NAME = "high_score.txt";
 
@@ -25,7 +26,7 @@ namespace ksmith70DungeonFinalProject
 
         public event EventHandler<UpdateEventArgs> Update;
         public event EventHandler<NewEncounterEventArgs> NewEncounter;
-        public event EventHandler<PlayerChoiceEventArgs> CurrentAttacker;
+        public event EventHandler<CurrentAttackerEventArgs> CurrentAttacker;
         public event EventHandler<EventArgs> BeatEncounter;
         public event EventHandler<EventArgs> LostGame;
 
@@ -106,6 +107,8 @@ namespace ksmith70DungeonFinalProject
                     {
                         playerParty.Remove(target);
                         turnOrder.Remove(target);
+                        // decrement so we are not one ahead in turn order
+                        currentTurn = currentTurn - 1; 
                     }
                     break;
                 case "Defend":
@@ -157,7 +160,7 @@ namespace ksmith70DungeonFinalProject
         public void GenerateEncounter()
         {
             // get rid of any old enemies that may be present
-            turnOrder.RemoveAll(IsEnemy);
+            turnOrder.RemoveAll(IsEnemy); 
             enemyParty.Clear();
 
             ConstructEnemies();
@@ -217,9 +220,13 @@ namespace ksmith70DungeonFinalProject
 
         public void PlayerTurn(string action, Actor target)
         {
-
+            // if the current hero is alive then attack
             // current hero decided by current turn state
+            
             Hero currentHero = (Hero)turnOrder[currentTurn];
+            
+            // ADD HERE
+
             UpdateEventArgs args = new UpdateEventArgs();
             PerformAction(action, target, currentHero, args);
             // if we are attacking an enemy update with enemy values
@@ -236,22 +243,25 @@ namespace ksmith70DungeonFinalProject
             OnUpdate(this, args);
             // Attack player until it's their turn again
             AttackPlayerConsecutively();
-            
-            if (currentTurn == turnOrder.Count)
-            {
-                currentTurn = 0;
-            }
-            RaiseCurrentAttacker();
 
-            // check if we need to generate new level
-            if (EncounterWon())
+            if (!gameIsOver)
             {
-                EventArgs beatEncounterArgs = new EventArgs();
-                OnBeatEncounter(this, beatEncounterArgs);
-                UpdateGameStats();
-                StartNewLevel();
-            }
+                if (currentTurn == turnOrder.Count)
+                {
+                    currentTurn = 0;
+                }
+                RaiseCurrentAttacker();
 
+                // check if we need to generate new level
+                if (EncounterWon())
+                {
+                    EventArgs beatEncounterArgs = new EventArgs();
+                    OnBeatEncounter(this, beatEncounterArgs);
+                    UpdateGameStats();
+                    StartNewLevel();
+                }
+
+            }
 
         }
 
@@ -312,19 +322,19 @@ namespace ksmith70DungeonFinalProject
         {
             if (currentTurn < turnOrder.Count)
             {
-                PlayerChoiceEventArgs playChoiceArgs = new PlayerChoiceEventArgs();
-                playChoiceArgs.PlayerTag = turnOrder[currentTurn].TagNumber;
+                CurrentAttackerEventArgs currentAttackerArgs = new CurrentAttackerEventArgs();
+                currentAttackerArgs.PlayerTag = turnOrder[currentTurn].TagNumber;
 
                 if (turnOrder[currentTurn] is Hero)
                 {
-                    playChoiceArgs.AttackerIsEnemy = true;
+                    currentAttackerArgs.AttackerIsHero = true;
                 }
                 else
                 {
-                    playChoiceArgs.AttackerIsEnemy = false;
+                    currentAttackerArgs.AttackerIsHero = false;
                 }
 
-                OnCurrentAttacker(this, playChoiceArgs);
+                OnCurrentAttacker(this, currentAttackerArgs);
             }
         }
 
@@ -355,15 +365,16 @@ namespace ksmith70DungeonFinalProject
         {
             // generate all our Actors so we can track their stats (to update gui)
             // generate a new encounter based on that actor
-            currentTurn = 0;
-
             // if its the first encounter generate a new party
             if (encounters == 0)
             {
+                currentTurn = 0;
                 GeneratePlayerParty(); // this is run ONCE since we have ONE party
             }
             GenerateEncounter(); // make enemies and add to turnOrder
                                  // generate event args and populate bbitmaps 
+            
+            SortTurnOrder();
             NewEncounterEventArgs args = new NewEncounterEventArgs();
             CreateNewEncounterArgs(args);
             OnNewEncounter(this, args);
@@ -380,6 +391,9 @@ namespace ksmith70DungeonFinalProject
                 {
                     EnemyTurn();
                 }
+
+                // ADD ONE HERE (potentially)
+
                 currentTurn++;
 
                 // check if next turn is player so we can enabled buttons
@@ -436,28 +450,18 @@ namespace ksmith70DungeonFinalProject
 
         }
 
-        private void GenerateInitialTurnOrder()
-        {
-            // take our hero party and 
-
-            Random randGenerator = new Random();
-            int randInt = randGenerator.Next();
-            turnOrder = new List<Actor>();
-            // FOR NOW ONLY ONE ACTOR BUT UPDATE TO 3 LATER
-            // Heroes are default so we dont need to randomly select them
-
-            Fighter fighter = new Fighter();
-            Dragon dragon = new Dragon();
-
-            turnOrder.Add(fighter);
-            turnOrder.Add(dragon); // TODO : randomize this
-        }
-
         private void SortTurnOrder()
         {
             // foreach actor in turnOrder order by speed using bubble sort
+            int[] sortedArr = new int[turnOrder.Count];
+            for(int i = 0; i < turnOrder.Count; i++)
+            {
+                sortedArr[i] = turnOrder[i].Speed;
+            }
+            //BubbleSort(sortedArr, sortedArr.Length);
+            turnOrder = turnOrder.OrderBy(actor => actor.Speed).ToList();
         }
-
+    
         private bool EncounterWon()
         {
             bool wonEncounter = false;
@@ -486,18 +490,29 @@ namespace ksmith70DungeonFinalProject
         {
             // if all heroes have died end game. dungeon never ends !!!
             int numDead = 0;
-            foreach(var hero in playerParty)
+            foreach (var hero in playerParty)
             {
-                if(hero.HitPoints <= 0)
+                if (hero.HitPoints <= 0)
                 {
                     numDead++;
                 }
             }
-            if(numDead == playerParty.Count)
+            if (numDead == playerParty.Count)
             {
+                gameIsOver = true;
                 EventArgs args = new EventArgs();
                 OnLostGame(this, args);
             }
+
+            // NEW CODE
+
+            /*if(playerParty.Count == 0)
+            {
+                gameIsOver = true;
+                EventArgs args = new EventArgs();
+                OnLostGame(this, args);
+            }*/
+
         }
 
         public void UpdateGUI()
@@ -528,7 +543,7 @@ namespace ksmith70DungeonFinalProject
         {
             Update.Invoke(this, e);
         }
-        protected virtual void OnCurrentAttacker(object sender, PlayerChoiceEventArgs e)
+        protected virtual void OnCurrentAttacker(object sender, CurrentAttackerEventArgs e)
         {
             CurrentAttacker.Invoke(this, e);
         }

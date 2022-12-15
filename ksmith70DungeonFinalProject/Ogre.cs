@@ -16,7 +16,7 @@ namespace ksmith70DungeonFinalProject
             Intelligence = 3;
             MagicDefense = 2;
             Name = "Bad Ogre";
-            Speed = 5;
+            Speed = 7;
             SpriteName = "Ogre";
             Strength = 2;
             IsDefending = false;

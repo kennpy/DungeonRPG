@@ -20,7 +20,7 @@ namespace ksmith70DungeonFinalProject
             Intelligence = 3;
             MagicDefense = 2;
             Name = "Cool Mage";
-            Speed = 5;
+            Speed = 8;
             SpriteName = "Mage";
             Strength = 2;
             IsDefending = false;

@@ -66,7 +66,6 @@
             this.heroPb1.TabIndex = 0;
             this.heroPb1.TabStop = false;
             this.heroPb1.Tag = "1";
-            this.heroPb1.Click += new System.EventHandler(this.pictureBox1_Click);
             // 
             // heroPb2
             // 
@@ -97,7 +96,6 @@
             this.enemyPb3.TabIndex = 3;
             this.enemyPb3.TabStop = false;
             this.enemyPb3.Tag = "3";
-            this.enemyPb3.Click += new System.EventHandler(this.pictureBox4_Click);
             // 
             // enemyPb1
             // 
@@ -172,7 +170,6 @@
             this.defendBtn.Tag = "Defend";
             this.defendBtn.Text = "Defend";
             this.defendBtn.UseVisualStyleBackColor = true;
-            this.defendBtn.Click += new System.EventHandler(this.defendBtn_Click);
             // 
             // progressBar1
             // 

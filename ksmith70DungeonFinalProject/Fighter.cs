@@ -18,9 +18,9 @@ namespace ksmith70DungeonFinalProject
             Intelligence = 5;
             MagicDefense = 5;
             Name = "Fighter Juan";
-            Speed = 5;
+            Speed = 3;
             SpriteName = "Punch";
-            Strength = 100;
+            Strength = 4;
             IsDefending = false;
 
             this.Image = Properties.Resources.Fighter;

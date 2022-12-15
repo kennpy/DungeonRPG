@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace ksmith70DungeonFinalProject
 {
-    public class PlayerChoiceEventArgs
+    public class CurrentAttackerEventArgs
     {
         private int playerTag;
-        private bool attackerIsEnemy;
+        private bool attackerIsHero;
 
         public int PlayerTag { get => playerTag; set => playerTag = value; }
-        public bool AttackerIsEnemy { get => attackerIsEnemy; set => attackerIsEnemy = value; }
+        public bool AttackerIsHero { get => attackerIsHero; set => attackerIsHero = value; }
     }
 }

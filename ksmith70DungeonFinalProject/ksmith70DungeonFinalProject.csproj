@@ -64,7 +64,7 @@
     <Compile Include="Mage.cs" />
     <Compile Include="NewEncounterEventArgs.cs" />
     <Compile Include="Ogre.cs" />
-    <Compile Include="PlayerChoiceEventArgs.cs" />
+    <Compile Include="CurrentAttackerEventArgs.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TurnReadyEventArgs.cs" />

@@ -69,27 +69,6 @@ namespace ksmith70DungeonFinalProject
             enemyPb3.Click += EnemyPbClicked_Handler;*/
         }
 
-
-        private void OnEnabledChanged(object sender, EventArgs e)
-        {
-            // battleLog.AppendText("disabled !");
-        }
-        private void pictureBox4_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void pictureBox1_Click(object sender, EventArgs e)
-        {
-            // get the tag so we know which was clicked
-            int tagNum = int.Parse((((PictureBox)sender).Tag).ToString());
-
-        }
-
-        private void defendBtn_Click(object sender, EventArgs e)
-        {
-        }
-
         private void PrepBoard()
         {
             heroPbs.Add(heroPb1);
@@ -164,6 +143,9 @@ namespace ksmith70DungeonFinalProject
                 box.Visible = false;
             }
         }
+       
+
+        
         private void SetInitialHeroState(NewEncounterEventArgs e, int position)
         {
             if (e.HeroHealth[position] > 0)
@@ -176,14 +158,14 @@ namespace ksmith70DungeonFinalProject
             }
         }
 
-        public  void OnPlayerChoice_Handler(object sener, PlayerChoiceEventArgs e)
+        public  void OnPlayerChoice_Handler(object sener, CurrentAttackerEventArgs e)
         {
             // enable action buttons and disable enemies
             ToggleActionBtnEnable(true);
 
             ResetPictureBoxBackgrounds();
 
-            if (e.AttackerIsEnemy)
+            if (e.AttackerIsHero)
             {
                 heroPbs[e.PlayerTag - 1].BackColor = Color.Yellow;
             }
@@ -191,14 +173,6 @@ namespace ksmith70DungeonFinalProject
             {
                 enemyPbs[e.PlayerTag - 1].BackColor = Color.Yellow;
             }
-
-            // already disabled upon enemyPbClick so dont need to re-disable (i think)
-            // THIS WAS NOT ENABLED ORIGINALLY
-            /* foreach(var enemyBox in enemyPbs)
-             {
-                 enemyBox.Enabled = false;
-             }*/
-
         }
 
         public void OnUpdate_Handler(object sender, UpdateEventArgs e)
@@ -322,52 +296,19 @@ namespace ksmith70DungeonFinalProject
             }
         }
         
-        private void UpdateAttackerBackground(UpdateEventArgs e)
-        {
-            if (e.TargetIsHero)
-            {
-                // rotate the picture box for current attacking enemy
-                for (int i = 0; i < enemyPbs.Count; i++)
-                {
-                    if (i == currentAttackerId)
-                    {
-                        enemyPbs[i].BackColor = Color.Yellow;
-                    }
-                    else
-                    {
-                        enemyPbs[i].BackColor = Color.Transparent;
-                    }
-                    enemyPbs[i].Update();
-                }
-            }
-            else
-            {
-                // rotate the picture box for current attacking hero
-                for (int i = 0; i < heroPbs.Count; i++)
-                {
-                    if (i == currentAttackerId)
-                    {
-                        heroPbs[i].BackColor = Color.Yellow;
-                    }
-                    else
-                    {
-                        heroPbs[i].BackColor = Color.Transparent;
-                    }
-                    heroPbs[i].Update();
-                }
-            }
-        }
-
         public void OnBeatEncounter_Handler(object sender, EventArgs e)
         {
             battleLog.AppendText("\r\nYou beat the encounter ! Great job !");
         }
+        
         public void OnLostGame_Handler(object sender, EventArgs e)
         {
             battleLog.AppendText("\r\nGame lost :(");
             MessageBox.Show("You lost the game ! Good try !");
             // disable all buttons
             // RE ENABLED
+            HideEnemyPictureBoxes();
+            HideEnemyProgressBars();
             ToggleActionBtnEnable(false);
             ToggleEnemyPictureBoxEnable(false);
         }
@@ -465,33 +406,13 @@ namespace ksmith70DungeonFinalProject
             args.Enemy = targetTag;
 
             OnTurnReady(this, args);
-            // RE ENABLE
             ToggleEnemyPictureBoxEnable(false);
-
             ToggleActionBtnEnable(true);
-
         }
 
-        private void toolStripDropDownButton1Clicked_Handler(object sender, EventArgs e)
-        {
-            // get high score
-            // string score =
-            // display high score
-            // IDK HOW TO DO THIS
-        }
         protected virtual void OnTurnReady(object sender, TurnReadyEventArgs e)
         {
             TurnReady.Invoke(this, e);
-
-        }
-
-        private void toolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            
-        }
-
-        private void toolStripDropDownButton1_Click(object sender, EventArgs e)
-        {
 
         }
 
